@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toque Gourmet Especial | Pipocas Gourmet</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --gold:#b8892f;
+      --gold-dark:#8a6116;
+      --cream:#f5f0e6;
+      --paper:#efe7d6;
+      --ink:#2b2b2b;
+
+      --hero-panel-opacity: .20;
+      --hero-grain-opacity: .22;
+    }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+
+    body{
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      overflow-x:hidden;
+      background: #f7f4ee;
+    }
+
+    .paper-bg{
+      position: relative;
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(255,255,255,.70), transparent 60%),
+        radial-gradient(1200px 700px at 80% 0%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--cream), var(--paper));
+    }
+    .paper-bg::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle at 12% 20%, rgba(0,0,0,.12) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 45% 52%, rgba(0,0,0,.10) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 78% 30%, rgba(0,0,0,.10) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 30% 78%, rgba(0,0,0,.08) 0 1px, transparent 1px 100%);
+      background-size: 220px 220px, 260px 260px, 240px 240px, 280px 280px;
+      opacity:.14;
+      mix-blend-mode:multiply;
+    }
+
+    header{
+      position: fixed;
+      top:0; left:0; right:0;
+      z-index: 1000;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .nav-wrap{
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+    }
+    .nav-group{
+      flex: 1 1 0;
+      display:flex;
+      align-items:center;
+      gap: 14px;
+    }
+    .nav-group.left{ justify-content:flex-start; }
+    .nav-group.right{ justify-content:flex-end; }
+
+    .nav-link{
+      text-decoration:none;
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      border-radius: 999px;
+      transition: transform .15s ease, color .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+    .nav-link:hover{
+      color: var(--gold-dark);
+      background: rgba(184,137,47,.10);
+      transform: translateY(-1px);
+    }
+    .nav-link.disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      pointer-events:none;
+      background: transparent !important;
+      transform:none !important;
+    }
+
+    .brand{
+      flex: 0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      user-select:none;
+    }
+    .logo-round{
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      border: 2px solid rgba(184,137,47,.35);
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 10px 24px rgba(0,0,0,.12);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+    }
+    .logo-round img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+    }
+    .logo-fallback{
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      color: var(--gold-dark);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    .brand-text{
+      text-align:center;
+      line-height:1.05;
+    }
+    .brand-text .title{
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--gold-dark);
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+    .brand-text .sub{
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.45);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .square-btn{
+      width: 34px;
+      height: 34px;
+      background: var(--gold);
+      border: 1px solid rgba(0,0,0,.05);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition: transform .15s ease, filter .15s ease;
+      position: relative;
+    }
+    .square-btn:hover{ transform: translateY(-1px); filter: brightness(.96); }
+    .square-btn svg{ width:16px; height:16px; fill:#fff; }
+
+    .badge{
+      position:absolute;
+      top:-6px; right:-6px;
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      background:#111;
+      color:#fff;
+      font-size: 10px;
+      display:grid;
+      place-items:center;
+      border: 2px solid rgba(255,255,255,.95);
+    }
+
+    /* HERO */
+    .hero{ padding-top: 84px; }
+    .hero-banner{ max-width: 1240px; margin: 0 auto; padding: 0 22px; }
+
+    .hero-image{
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.45);
+      background:#000;
+    }
+    .hero-bg{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(135deg, #caa45a, #7c5512);
+      transform: scale(1.01);
+      filter: saturate(1.05);
+    }
+    .hero-bg img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.01);
+      filter: saturate(1.05);
+    }
+    .hero-image::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.36));
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* Slider */
+    .slide{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      transition: opacity .55s ease;
+      z-index:0;
+    }
+    .slide.active{
+      opacity:1;
+      z-index:0;
+    }
+
+    .hero-text{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding: 18px;
+      z-index:2;
+    }
+    .hero-panel{
+      position: relative;
+      padding: 18px 22px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(0,0,0, var(--hero-panel-opacity));
+      box-shadow: 0 18px 45px rgba(0,0,0,.22);
+      backdrop-filter: blur(2px);
+      max-width: min(860px, 92vw);
+    }
+    .hero-panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle at 18% 28%, rgba(255,255,255,.16) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 62% 58%, rgba(255,255,255,.12) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 82% 32%, rgba(255,255,255,.10) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 35% 76%, rgba(255,255,255,.10) 0 1px, transparent 1px 100%);
+      background-size: 130px 130px, 160px 160px, 150px 150px, 170px 170px;
+      opacity: var(--hero-grain-opacity);
+      mix-blend-mode: overlay;
+    }
+    .hero-panel::after{
+      content:"";
+      position:absolute;
+      inset:-40% -60%;
+      background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.10) 50%, transparent 60%);
+      transform: rotate(18deg);
+      opacity:.35;
+      pointer-events:none;
+    }
+    .hero-text h1{
+      position: relative;
+      z-index:1;
+      font-family:"Cinzel", serif;
+      font-size: 34px;
+      letter-spacing: 3px;
+      color:#fff;
+      text-transform: uppercase;
+      font-weight: 600;
+      text-shadow: 0 14px 30px rgba(0,0,0,.45);
+      line-height: 1.05;
+    }
+
+    .hero-arrows{
+      position:absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      z-index: 3;
+      display:flex;
+      justify-content:space-between;
+      padding: 0 14px;
+      pointer-events:none;
+    }
+    .hero-arrow{
+      pointer-events:auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition: transform .15s ease, filter .15s ease;
+      box-shadow: 0 16px 24px rgba(0,0,0,.22);
+    }
+    .hero-arrow:hover{ transform: translateY(-1px); filter: brightness(.97); }
+    .hero-arrow svg{ width:16px; height:16px; fill:#fff; }
+
+    .section-dot{
+      width: 36px;
+      height: 36px;
+      margin: -18px auto 14px;
+      border-radius: 999px;
+      background: var(--gold);
+      border: 3px solid rgba(255,255,255,.85);
+      box-shadow: 0 16px 28px rgba(0,0,0,.18);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition: transform .15s ease;
+      position: relative;
+      z-index: 10;
+    }
+    .section-dot:hover{ transform: translateY(-2px); }
+    .section-dot svg{ width:14px; height:14px; fill:#fff; opacity:.95; }
+
+    .flavors{ max-width: 1240px; margin: 0 auto; padding: 0 22px 22px; }
+
+    /* Bandejas */
+    .trays{
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 12px 26px rgba(0,0,0,.08);
+      padding: 18px 14px 14px;
+    }
+    .tray{
+      position: relative;
+      margin: 16px 0;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 14px 26px rgba(0,0,0,.10);
+      overflow: hidden;
+    }
+    .tray-lid{
+      width:100%;
+      border:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 14px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.55));
+      position: relative;
+      transition: filter .15s ease, transform .15s ease;
+    }
+    .tray-lid:hover{ filter: brightness(.98); }
+    .tray-lid:active{ transform: scale(.997); }
+    .tray-lid::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 30%, rgba(184,137,47,.14) 0 2px, transparent 2px 100%),
+        radial-gradient(circle at 58% 65%, rgba(184,137,47,.10) 0 2px, transparent 2px 100%),
+        radial-gradient(circle at 82% 40%, rgba(184,137,47,.10) 0 2px, transparent 2px 100%);
+      background-size: 180px 180px, 220px 220px, 200px 200px;
+      opacity:.55;
+      pointer-events:none;
+    }
+    .tray-title{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      text-align:left;
+      z-index:1;
+    }
+    .tray-title strong{
+      font-family:"Cinzel", serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.78);
+    }
+    .tray-title span{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      letter-spacing: .3px;
+    }
+    .tray-badge{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      z-index:1;
+      white-space: nowrap;
+    }
+    .pill{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--gold);
+      padding: 7px 10px;
+      box-shadow: 0 10px 18px rgba(138,97,22,.16);
+    }
+    .caret{
+      width: 32px;
+      height: 32px;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.90);
+      transition: transform .22s ease;
+    }
+    .caret svg{ width:16px; height:16px; fill: rgba(0,0,0,.75); }
+
+    .tray-body{
+      height: 0px;
+      overflow: hidden;
+      border-top: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.40);
+      transition: height .35s cubic-bezier(.2,.9,.2,1);
+    }
+    .tray-inner{ padding: 14px 12px 16px; }
+
+    .tray.open .caret{ transform: rotate(180deg); }
+
+    .tray-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    /* Cards */
+    .card{
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(0,0,0,.10);
+      box-shadow: 0 12px 20px rgba(0,0,0,.10);
+      overflow:hidden;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(184,137,47,.45);
+      box-shadow: 0 18px 30px rgba(0,0,0,.14);
+    }
+    .card .img{
+      height: 205px;
+      background: #fff;
+      border-bottom: 1px solid rgba(0,0,0,.10);
+      overflow: hidden;
+      display:block;
+    }
+    .card .img img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #fff;
+      display: block;
+    }
+    .card .body{
+      padding: 12px 12px 14px;
+      min-height: 160px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .card h3{
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(0,0,0,.78);
+      line-height: 1.25;
+      text-align:left;
+    }
+    .card p{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.35;
+      flex: 1 1 auto;
+      text-align:left;
+    }
+    .meta-pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.70);
+      padding: 7px 10px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.78);
+      width: fit-content;
+      box-shadow: 0 10px 16px rgba(0,0,0,.06);
+    }
+
+    .price{
+      font-size: 11px;
+      font-weight: 900;
+      color: rgba(0,0,0,.72);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .btn-cart{
+      align-self:center;
+      border: 0;
+      background: var(--gold);
+      color:#fff;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      cursor:pointer;
+      transition: transform .14s ease, filter .14s ease;
+      box-shadow: 0 12px 18px rgba(138,97,22,.18);
+    }
+    .btn-cart:hover{ transform: translateY(-1px); filter: brightness(.96); }
+    .btn-cart:active{ transform: translateY(0) scale(.985); }
+
+    /* ===== Baldes ===== */
+    .bucket-grid{ display:grid; grid-template-columns: 1fr; gap: 14px; }
+
+    .bucket-config{
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 12px 20px rgba(0,0,0,.08);
+      padding: 14px 12px 12px;
+    }
+
+    .bucket-title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .bucket-title h3{
+      font-family:"Cinzel", serif;
+      font-size: 13px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.78);
+      margin:0;
+      line-height:1.2;
+    }
+    .bucket-help{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.35;
+      max-width: 520px;
+    }
+
+    /* Preview SEM zoom, sem corte */
+    .bucket-preview{
+      margin-top: 12px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      padding: 10px;
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+    .bucket-preview .photo{
+      width: 220px;
+      height: 170px; /* mais alto para não cortar */
+      border: 1px dashed rgba(0,0,0,.25);
+      background: rgba(255,255,255,.75);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      position: relative;
+    }
+    .bucket-preview .photo img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* encaixa certinho sem cortar */
+      display:block;
+      transform: none !important; /* remove qualquer zoom */
+    }
+    .bucket-preview .photo .placeholder{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      text-align:center;
+      padding: 6px;
+    }
+    .bucket-preview .info{
+      flex: 1 1 auto;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .bucket-preview .info .line{
+      font-size: 12px;
+      color: rgba(0,0,0,.72);
+      font-weight: 800;
+      letter-spacing: .4px;
+    }
+    .bucket-preview .info .small{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.35;
+    }
+
+    .bucket-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .field{ display:flex; flex-direction:column; gap: 6px; }
+    .field label{
+      font-size: 11px;
+      font-weight: 900;
+      color: rgba(0,0,0,.70);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .select, .qty-input{
+      height: 36px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #fff;
+      padding: 0 10px;
+      font-size: 12px;
+      outline: none;
+    }
+    .qty-input{ font-weight: 800; letter-spacing: .4px; }
+
+    .flavors-box{
+      margin-top: 12px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      padding-top: 12px;
+    }
+    .flavors-box .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .flavors-box .note{
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.35;
+    }
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+    .chip{
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.90);
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); filter: brightness(.98); }
+    .chip.active{
+      border-color: rgba(184,137,47,.55);
+      background: rgba(184,137,47,.10);
+    }
+
+    .bucket-actions{
+      margin-top: 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .btn-secondary{
+      border: 1px solid rgba(0,0,0,.12);
+      background:#fff;
+      color: rgba(0,0,0,.72);
+      font-weight:900;
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 11px 12px;
+      cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .btn-secondary:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10); }
+
+    .bucket-error{
+      margin-top: 10px;
+      color: #7a0e0e;
+      font-size: 12px;
+      font-weight: 700;
+      display:none;
+    }
+
+    .bucket-price{
+      margin-top: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      padding: 10px;
+    }
+    .bucket-price .label{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.70);
+    }
+    .bucket-price .value{
+      font-size: 13px;
+      font-weight: 900;
+      color: rgba(0,0,0,.78);
+      letter-spacing: .2px;
+    }
+
+    /* ===== Eventos ===== */
+    .events{
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 22px 22px;
+    }
+    .events-panel{
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 12px 26px rgba(0,0,0,.08);
+      padding: 18px 16px;
+    }
+    .events-panel h2{
+      font-family:"Cinzel", serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.75);
+      margin-bottom: 10px;
+    }
+    .events-panel p{
+      font-size: 12px;
+      color: rgba(0,0,0,.60);
+      line-height: 1.6;
+      max-width: 820px;
+    }
+    .events-actions{
+      margin-top: 14px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .btn-primary{
+      border:0;
+      background: var(--gold);
+      color:#fff;
+      font-weight:900;
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      cursor:pointer;
+      box-shadow: 0 12px 18px rgba(138,97,22,.18);
+      transition: transform .14s ease, filter .14s ease;
+    }
+    .btn-primary:hover{ transform: translateY(-1px); filter: brightness(.96); }
+    .btn-primary:active{ transform: translateY(0) scale(.985); }
+
+    /* Footer */
+    footer{
+      max-width: 1240px;
+      margin: 0 auto 30px;
+      padding: 0 22px 30px;
+    }
+    .footer-panel{
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 12px 22px rgba(0,0,0,.08);
+      padding: 18px 18px 16px;
+    }
+    .footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .social{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+    .social a{
+      width: 26px;
+      height: 26px;
+      display:grid;
+      place-items:center;
+      text-decoration:none;
+      border-radius:999px;
+      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
+    }
+    .social a:hover{ transform: translateY(-1px); filter: brightness(.92); }
+    .social svg{ width:16px; height:16px; fill: var(--gold); }
+    .footer-search{
+      display:flex;
+      align-items:center;
+      width: min(560px, 100%);
+      height: 34px;
+      border: 1px solid rgba(0,0,0,.12);
+      background:#fff;
+    }
+    .footer-search input{
+      width:100%;
+      height:100%;
+      border:0;
+      outline:0;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+    .footer-search button{
+      width: 40px;
+      height:100%;
+      border:0;
+      cursor:pointer;
+      background:#fff;
+      border-left: 1px solid rgba(0,0,0,.10);
+    }
+    .footer-search button svg{ width:16px; height:16px; fill: var(--gold-dark); }
+    .fine{
+      text-align:center;
+      margin-top: 12px;
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+    }
+    .fine a{
+      color: rgba(0,0,0,.55);
+      text-decoration:none;
+      border-bottom: 1px solid rgba(184,137,47,.55);
+      padding-bottom: 1px;
+      margin: 0 10px;
+    }
+
+    /* ===== Carrinho ===== */
+    .cart-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.35);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+      z-index: 1200;
+    }
+    .cart-overlay.open{ opacity:1; pointer-events:auto; }
+
+    .cart-drawer{
+      position:fixed;
+      top:0;
+      right:-460px;
+      width: min(460px, 92vw);
+      height: 100vh;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(0,0,0,.10);
+      box-shadow: -20px 0 60px rgba(0,0,0,.22);
+      z-index: 1300;
+      transition: right .20s ease;
+      display:flex;
+      flex-direction:column;
+    }
+    .cart-drawer.open{ right:0; }
+
+    .cart-head{
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .cart-head h3{
+      margin:0;
+      font-family:"Cinzel", serif;
+      font-size: 16px;
+      letter-spacing: 1.2px;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+    }
+    .cart-close{
+      width: 34px;
+      height: 34px;
+      border:1px solid rgba(0,0,0,.10);
+      background:#fff;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      transition: transform .15s ease;
+    }
+    .cart-close:hover{ transform: translateY(-1px); }
+    .cart-close svg{ width:16px; height:16px; fill:#222; }
+
+    .cart-body{
+      padding: 12px 16px;
+      overflow:auto;
+      flex: 1 1 auto;
+    }
+    .cart-empty{
+      color: rgba(0,0,0,.55);
+      font-size: 12px;
+      line-height:1.4;
+      padding: 10px 0;
+    }
+    .cart-item{
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.88);
+      padding: 10px 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+    .cart-item .row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .cart-item .name{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(0,0,0,.78);
+      line-height:1.25;
+    }
+    .cart-item .meta{
+      margin-top: 4px;
+      font-size: 11px;
+      color: rgba(0,0,0,.55);
+      line-height: 1.35;
+    }
+    .qty{
+      display:flex;
+      align-items:center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .qty button{
+      width: 28px;
+      height: 28px;
+      background: var(--gold);
+      border:0;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+      transition: filter .14s ease, transform .14s ease;
+    }
+    .qty button:hover{ filter: brightness(.96); transform: translateY(-1px); }
+    .qty .count{
+      min-width: 28px;
+      text-align:center;
+      font-weight:900;
+      font-size: 12px;
+      color: rgba(0,0,0,.75);
+    }
+    .remove{
+      border:0;
+      background: transparent;
+      color: rgba(0,0,0,.55);
+      font-size: 11px;
+      text-decoration: underline;
+      cursor:pointer;
+      padding: 0;
+      margin-top: 10px;
+    }
+    .remove:hover{ color: rgba(0,0,0,.75); }
+
+    .cart-foot{
+      border-top: 1px solid rgba(0,0,0,.08);
+      padding: 12px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .totals{
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.88);
+      padding: 10px 10px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      font-size: 12px;
+      color: rgba(0,0,0,.72);
+    }
+    .totals .line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 4px 0;
+    }
+    .totals .label{ font-weight:800; }
+    .totals .value{ font-weight:900; }
+    .cart-actions{ display:flex; gap: 10px; }
+    .btn-outline{
+      flex: 1 1 auto;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      color: rgba(0,0,0,.72);
+      font-weight:900;
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 11px 12px;
+      cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .btn-outline:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10); }
+
+    /* ===== POP ANIMATION ===== */
+    .pop-overlay{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5000;
+      overflow: hidden;
+    }
+    .popcorn{
+      position: absolute;
+      background-image: var(--pop-img);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.8) rotate(0deg);
+      filter: drop-shadow(0 14px 18px rgba(0,0,0,.22));
+      will-change: transform, opacity;
+    }
+    @keyframes popFallSide{
+      0%{ opacity: 0; transform: translate(var(--x0), var(--y0)) scale(var(--s0)) rotate(var(--r0)); }
+      12%{ opacity: 1; }
+      35%{ opacity: 1; transform: translate(var(--x1), var(--y1)) scale(var(--s1)) rotate(var(--r1)); }
+      100%{ opacity: 0; transform: translate(var(--x2), var(--y2)) scale(var(--s2)) rotate(var(--r2)); }
+    }
+
+    @media (max-width: 1020px){
+      .tray-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .bucket-row{ grid-template-columns: 1fr; }
+      .bucket-preview{ flex-direction:column; align-items:flex-start; }
+      .bucket-preview .photo{ width: 100%; height: 220px; }
+    }
+    @media (max-width: 820px){
+      .hero-text h1{ font-size: 24px; }
+      .tray-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .nav-group.left{ display:none; }
+      .brand-text .sub{ display:none; }
+      .hero-panel{ padding: 14px 14px; }
+      .hero-image{ height: 235px; }
+    }
+    @media (max-width: 520px){
+      .tray-grid{ grid-template-columns: 1fr; }
+      .brand-text .title{ font-size: 14px; }
+      .logo-round{ width: 48px; height: 48px; }
+      .tray-title strong{ font-size: 13px; }
+      .hero-arrow{ width: 36px; height: 36px; }
+    }
+  </style>
+</head>
+
+<body class="paper-bg">
+
+  <div id="popOverlay" class="pop-overlay" aria-hidden="true"></div>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="nav-group left">
+        <a class="nav-link" href="#home">Home</a>
+        <a class="nav-link" href="#sabores">Sabores</a>
+        <a class="nav-link" href="#baldes">Baldes</a>
+        <a class="nav-link" href="#eventos">Eventos</a>
+        <a class="nav-link disabled" href="javascript:void(0)" aria-disabled="true" title="Em breve">Sobre</a>
+      </div>
+
+      <div class="brand" aria-label="Toque Gourmet Especial">
+        <div class="logo-round">
+          <img src="logo.jpg" alt="Logo Toque Gourmet Especial"
+               onerror="this.remove(); document.getElementById('logoFallback').style.display='block';">
+          <div id="logoFallback" class="logo-fallback" style="display:none;">TGE</div>
+        </div>
+
+        <div class="brand-text">
+          <div class="title">Toque Gourmet Especial</div>
+          <div class="sub">Pipocas gourmet</div>
+        </div>
+      </div>
+
+      <div class="nav-group right">
+        <button class="square-btn" type="button" aria-label="WhatsApp" onclick="contactWhatsApp()">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-5.6c-.2-.1-1.2-.6-1.4-.7-.2-.1-.4-.1-.6.1l-.6.7c-.1.2-.3.2-.5.1-1-.4-1.8-1-2.5-1.8-.2-.2-.2-.4-.1-.5l.5-.6c.1-.2.1-.4 0-.6 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.6-.5h-.5c-.2 0-.4.1-.6.3-.6.6-.9 1.3-.9 2.1 0 .5.1 1 .3 1.5.6 1.4 1.6 2.6 2.8 3.6.6.5 1.3.9 2 1.2.8.3 1.4.4 1.9.3.6-.1 1.2-.5 1.4-1 .2-.4.2-.8.1-.9-.1-.1-.2-.1-.4-.2z"/>
+          </svg>
+        </button>
+
+        <button class="square-btn" type="button" aria-label="Carrinho" onclick="openCart()">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.2 14h9.9c.9 0 1.7-.6 1.9-1.5l1.6-7.5H6.1L5.7 3H2v2h2l2.1 10.2c.2.9 1 1.8 2.1 1.8z"/>
+          </svg>
+          <span class="badge" id="cartBadge">0</span>
+        </button>
+
+        <a class="nav-link" href="javascript:void(0)" onclick="contactWhatsApp()">Contato</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO / PAINEL (painel.png + painel 2.png (iFood)) -->
+  <section class="hero" id="home">
+    <div class="hero-banner">
+      <div class="hero-image" aria-label="Painel">
+
+        <!-- SLIDE 1 (texto) -->
+        <div class="slide active" data-slide="0">
+          <div class="hero-bg">
+            <img src="painel.png" alt="Painel principal">
+          </div>
+          <div class="hero-text">
+            <div class="hero-panel">
+              <h1>DESCUBRA NOSSOS SABORES ARTESANAIS</h1>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 (painel 2.png - iFood) -->
+        <div class="slide" data-slide="1">
+  <a class="hero-click" href="https://www.ifood.com.br/delivery/hortolandia-sp/toque-gourmet-especial-parque-gabriel/dd778ca9-1ebd-4409-b1ae-3b601c021520?utm_medium=share"
+     target="_blank" rel="noopener noreferrer"
+     aria-label="Abrir Toque Gourmet Especial no iFood">
+    <div class="hero-bg">
+      <img src="painel 2.png" alt="Painel iFood">
+    </div>
+  </a>
+</div>
+
+
+        <!-- SETAS -->
+        <div class="hero-arrows">
+          <button class="hero-arrow" type="button" aria-label="Anterior" onclick="prevHero()">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <button class="hero-arrow" type="button" aria-label="Próximo" onclick="nextHero()">
+            <svg viewBox="0 0 24 24">
+              <path d="m10 6 1.41 1.41L7.83 11H20v2H7.83l3.58 3.59L10 18l-6-6z"
+                    transform="scale(-1,1) translate(-24,0)"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-dot" onclick="document.getElementById('sabores').scrollIntoView({behavior:'smooth'})" title="Ver sabores">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SABORES -->
+  <section class="flavors" id="sabores">
+    <div class="trays">
+
+      <div class="tray" id="tray-trad">
+        <button class="tray-lid" type="button" aria-expanded="false" onclick="toggleTray('tray-trad')">
+          <div class="tray-title">
+            <strong>Sabores Tradicionais</strong>
+            <span>Saquinho 100g • R$ 17,00</span>
+          </div>
+          <div class="tray-badge">
+            <div class="pill">Abrir</div>
+            <div class="caret" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/></svg>
+            </div>
+          </div>
+        </button>
+
+        <div class="tray-body">
+          <div class="tray-inner">
+            <div class="tray-grid">
+              <article class="card">
+                <div class="img"><img src="Mousse de Maracujá.png" alt="Mousse de Maracujá"></div>
+                <div class="body">
+                  <h3>Mousse de Maracujá</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Delicado, cremoso e cítrico.</p>
+                  <div class="price">Valor: R$ 17,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('mousse_maracuja')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="img"><img src="Mousse de limão.png" alt="Mousse de Limão"></div>
+                <div class="body">
+                  <h3>Mousse de Limão</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Leve, refrescante e marcante.</p>
+                  <div class="price">Valor: R$ 17,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('mousse_limao')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="img"><img src="Ninho.png" alt="Ninho"></div>
+                <div class="body">
+                  <h3>Ninho</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Clássico cremoso e irresistível.</p>
+                  <div class="price">Valor: R$ 17,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('ninho')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="img"><img src="alpino.png" alt="Alpino"></div>
+                <div class="body">
+                  <h3>Alpino</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Chocolate intenso, final premium.</p>
+                  <div class="price">Valor: R$ 17,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('alpino')">Adicionar</button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tray" id="tray-vip">
+        <button class="tray-lid" type="button" aria-expanded="false" onclick="toggleTray('tray-vip')">
+          <div class="tray-title">
+            <strong>Sabores VIP</strong>
+            <span>Saquinho 100g • R$ 20,00</span>
+          </div>
+          <div class="tray-badge">
+            <div class="pill">Abrir</div>
+            <div class="caret" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/></svg>
+            </div>
+          </div>
+        </button>
+
+        <div class="tray-body">
+          <div class="tray-inner">
+            <div class="tray-grid">
+              <article class="card">
+                <div class="img"><img src="Ovomaltine.png" alt="Ovomaltine"></div>
+                <div class="body">
+                  <h3>Ovomaltine</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Crocância extra e sabor marcante.</p>
+                  <div class="price">Valor: R$ 20,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('ovomaltine')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="img">
+                  <img
+                    src="ninho co nutella.png"
+                    alt="Ninho com Nutella"
+                    onerror="this.onerror=null;
+                             if(!this.dataset.try2){ this.dataset.try2='1'; this.src='ninho com nutella.png'; return; }
+                             if(!this.dataset.try3){ this.dataset.try3='1'; this.src='Ninho com nutella.png'; return; }
+                             this.src='Ninho com Nutella.png';"
+                  >
+                </div>
+                <div class="body">
+                  <h3>Ninho com Nutella</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>sucesso de vendas, super cremoso.</p>
+                  <div class="price">Valor: R$ 20,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('ninho_nutella')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card" aria-hidden="true" style="opacity:.55;">
+                <div class="img"></div>
+                <div class="body">
+                  <h3>(Em breve)</h3>
+                  <p>Espaço reservado para novo sabor.</p>
+                  <div class="price">Valor: —</div>
+                  <button class="btn-cart" type="button" disabled style="opacity:.55; cursor:not-allowed;">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card" aria-hidden="true" style="opacity:.55;">
+                <div class="img"></div>
+                <div class="body">
+                  <h3>(Em breve)</h3>
+                  <p>Espaço reservado para novo sabor.</p>
+                  <div class="price">Valor: —</div>
+                  <button class="btn-cart" type="button" disabled style="opacity:.55; cursor:not-allowed;">Adicionar</button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-dot" onclick="document.getElementById('baldes').scrollIntoView({behavior:'smooth'})" title="Ver baldes">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- BALDES -->
+  <section class="flavors" id="baldes">
+    <div class="trays">
+
+      <div class="tray" id="tray-buckets">
+        <button class="tray-lid" type="button" aria-expanded="false" onclick="toggleTray('tray-buckets')">
+          <div class="tray-title">
+            <strong>Baldes</strong>
+            <span>Balde P: R$ 22,50 • Balde M: R$ 32,50 • Balde G: R$ 42,50</span>
+          </div>
+          <div class="tray-badge">
+            <div class="pill">Abrir</div>
+            <div class="caret" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/></svg>
+            </div>
+          </div>
+        </button>
+
+        <div class="tray-body">
+          <div class="tray-inner">
+            <div class="bucket-grid">
+              <div class="bucket-config">
+                <div class="bucket-title">
+                  <div>
+                    <h3>Monte seu balde</h3>
+                    <div class="bucket-help">
+                      Selecione o tamanho (P/M/G), escolha <strong>1 ou 2</strong> sabores e informe a <strong>quantidade</strong> de baldes.
+                      Depois clique em <strong>Adicionar ao carrinho</strong>.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Preview (encaixa sem cortar e sem zoom) -->
+                <div id="bucketPreview" class="bucket-preview" aria-label="Prévia do balde">
+                  <div class="photo" id="bucketPhotoBox">
+                    <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde (Balde M)</div>
+                    <img id="bucketPhoto" alt="Foto do balde" style="display:none;" />
+                  </div>
+
+                  <div class="info">
+                    <div class="line">Tamanho selecionado: <span id="bucketSelectedSize">Balde M</span></div>
+                    <div class="small" id="bucketSelectedPrice">Valor unitário: R$ 32,50</div>
+                    <div class="small">
+                      Arquivos aceitos automaticamente (com variações de nome):<br>
+                      <strong>Balde P.png</strong> / <strong>balde P.png</strong> •
+                      <strong>balde M.png</strong> / <strong>Balde M.png</strong> •
+                      <strong>balde G.png</strong> / <strong>Balde G.png</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bucket-row">
+                  <div class="field">
+                    <label for="bucketSize">Tamanho</label>
+                    <select id="bucketSize" class="select">
+                      <option value="P">Balde P</option>
+                      <option value="M" selected>Balde M</option>
+                      <option value="G">Balde G</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label for="bucketQty">Quantidade de baldes</label>
+                    <input id="bucketQty" class="qty-input" type="number" min="1" value="1" />
+                  </div>
+                </div>
+
+                <div class="flavors-box">
+                  <div class="top">
+                    <div class="field" style="flex:1;">
+                      <label>Sabores (mín. 1 / máx. 2)</label>
+                      <div class="note" id="bucketNote">Selecione 1 ou 2 sabores.</div>
+                    </div>
+                  </div>
+
+                  <div class="chips" id="bucketChips">
+                    <div class="chip" data-flavor="Ninho">Ninho</div>
+                    <div class="chip" data-flavor="Nutella">Nutella</div>
+                    <div class="chip" data-flavor="Kinder Bueno">Kinder Bueno</div>
+                    <div class="chip" data-flavor="Ovomaltine">Ovomaltine</div>
+                    <div class="chip" data-flavor="Cookies">Cookies</div>
+                    <div class="chip" data-flavor="Trufa">Trufa</div>
+                  </div>
+
+                  <div class="bucket-error" id="bucketError"></div>
+
+                  <div class="bucket-actions">
+                    <button class="btn-secondary" type="button" onclick="resetBucket()">Limpar seleção</button>
+                    <button class="btn-cart" type="button" onclick="addBucketToCart()">Adicionar ao carrinho</button>
+                  </div>
+
+                  <div class="bucket-price">
+                    <div class="label">Valor do balde (unitário)</div>
+                    <div class="value" id="bucketUnitPrice">R$ 32,50</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-dot" onclick="document.getElementById('eventos').scrollIntoView({behavior:'smooth'})" title="Eventos">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
+        </svg>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EVENTOS -->
+  <section class="events" id="eventos">
+    <div class="events-panel">
+      <h2>Eventos e Lembrancinhas</h2>
+      <p>
+        Atendemos eventos com opções personalizadas de pipocas gourmet e combos.
+        Clique em “Mandar orçamento” para nos informar data, cidade, quantidade de pessoas e preferências de sabores.
+      </p>
+
+      <div class="events-actions">
+        <button class="btn-primary" type="button" onclick="sendEventsQuote()">
+          Solicitar orçamento via WhatsApp
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contato">
+    <div class="footer-panel">
+      <div class="footer-row">
+        <div class="social" aria-label="Redes sociais">
+          <a href="https://www.instagram.com/toque.gourmet.especial/"
+             target="_blank" rel="noopener noreferrer"
+             aria-label="Instagram Toque Gourmet Especial">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm10 2H7a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3zm-5 3.5A4.5 4.5 0 1112 16a4.5 4.5 0 010-9zm0 2A2.5 2.5 0 1014.5 12 2.5 2.5 0 0012 9.5zM17.8 6.2a.8.8 0 11-.8.8.8.8 0 01.8-.8z"/>
+            </svg>
+          </a>
+
+          <a href="javascript:void(0)" onclick="contactWhatsApp()" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-5.6c-.2-.1-1.2-.6-1.4-.7-.2-.1-.4-.1-.6.1l-.6.7c-.1.2-.3.2-.5.1-1-.4-1.8-1-2.5-1.8-.2-.2-.2-.4-.1-.5l.5-.6c.1-.2.1-.4 0-.6 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.6-.5h-.5c-.2 0-.4.1-.6.3-.6.6-.9 1.3-.9 2.1 0 .5.1 1 .3 1.5.6 1.4 1.6 2.6 2.8 3.6.6.5 1.3.9 2 1.2.8.3 1.4.4 1.9.3.6-.1 1.2-.5 1.4-1 .2-.4.2-.8.1-.9-.1-.1-.2-.1-.4-.2z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="footer-search" role="search" aria-label="Pesquisar sabores">
+          <input type="search" placeholder="Pesquisar..." />
+          <button type="button" aria-label="Buscar" onclick="alert('Pesquisa opcional (podemos implementar depois).')">
+            <svg viewBox="0 0 24 24">
+              <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="fine">
+        © <span id="year"></span> Toque Gourmet Especial
+        <a href="javascript:void(0)" onclick="contactWhatsApp()">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrinho">
+    <div class="cart-head">
+      <h3>Carrinho</h3>
+      <button class="cart-close" type="button" onclick="closeCart()" aria-label="Fechar carrinho">
+        <svg viewBox="0 0 24 24">
+          <path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.29 9.17 12 2.88 5.71 4.29 4.29l6.3 6.3 6.29-6.3z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="cart-body" id="cartBody"></div>
+
+    <div class="cart-foot">
+      <div class="totals" id="totalsBox"></div>
+
+      <div class="cart-actions">
+        <button class="btn-outline" type="button" onclick="clearCart()">Limpar</button>
+        <button class="btn-outline" type="button" onclick="closeCart()">Continuar</button>
+      </div>
+
+      <button class="btn-primary" type="button" onclick="checkoutWhatsApp()">Finalizar no WhatsApp</button>
+    </div>
+  </aside>
+
+  <script>
+    const WHATSAPP_PHONE = "5519953243215";
+    const POPCORN_IMG_FILE = "pipoca.png";
+
+    const PRICE_TRAD = 17.00; // saquinho 100g
+    const PRICE_VIP  = 20.00; // saquinho 100g
+    const BUCKET_PRICES = { P: 22.50, M: 32.50, G: 42.50 };
+
+    const catalog = {
+      mousse_maracuja: { id:"mousse_maracuja", name:"Mousse de Maracujá", category:"Tradicional", grams:100, price: PRICE_TRAD },
+      mousse_limao:    { id:"mousse_limao",    name:"Mousse de Limão",    category:"Tradicional", grams:100, price: PRICE_TRAD },
+      ninho:           { id:"ninho",           name:"Ninho",              category:"Tradicional", grams:100, price: PRICE_TRAD },
+      alpino:          { id:"alpino",          name:"Alpino",             category:"Tradicional", grams:100, price: PRICE_TRAD },
+
+      ovomaltine:      { id:"ovomaltine",      name:"Ovomaltine",         category:"VIP", grams:100, price: PRICE_VIP },
+      ninho_nutella:   { id:"ninho_nutella",   name:"Ninho com Nutella",  category:"VIP", grams:100, price: PRICE_VIP },
+    };
+
+    const cart = {};
+
+    function formatBRL(value){
+      return value.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    }
+
+    function openWhatsApp(message){
+      const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
+
+    function contactWhatsApp(){
+      openWhatsApp("Olá! Gostaria de mais informações sobre a Toque Gourmet Especial (pipocas gourmet).");
+    }
+
+    function sendEventsQuote(){
+      const msg =
+`Olá! Gostaria de solicitar um orçamento para *EVENTO ou LEMBRANCINHA* com a Toque Gourmet Especial.`;
+      openWhatsApp(msg);
+    }
+
+    function openCart(){
+      document.getElementById("cartOverlay").classList.add("open");
+      document.getElementById("cartDrawer").classList.add("open");
+    }
+
+    function closeCart(){
+      document.getElementById("cartOverlay").classList.remove("open");
+      document.getElementById("cartDrawer").classList.remove("open");
+    }
+
+    function cartCount(){
+      return Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    function addToCart(productId){
+      if(!catalog[productId]) return;
+      const key = `prod:${productId}`;
+      if(!cart[key]) cart[key] = { key, type:"product", productId, qty: 0 };
+      cart[key].qty += 1;
+      updateCartUI();
+      openCart();
+    }
+
+    /* ===== Baldes ===== */
+    const bucketState = { size: "M", qty: 1, flavors: [] };
+
+    function initBucketUI(){
+      const chips = document.getElementById("bucketChips");
+      if(!chips) return;
+
+      chips.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+
+        const flavor = chip.getAttribute("data-flavor");
+        const idx = bucketState.flavors.indexOf(flavor);
+
+        if(idx >= 0){
+          bucketState.flavors.splice(idx, 1);
+        } else {
+          if(bucketState.flavors.length >= 2){
+            showBucketError("Você pode escolher no máximo 2 sabores.");
+            return;
+          }
+          bucketState.flavors.push(flavor);
+        }
+
+        hideBucketError();
+        renderBucketChips();
+        renderBucketNote();
+      });
+
+      document.getElementById("bucketSize").addEventListener("change", (e) => {
+        bucketState.size = e.target.value;
+        syncBucketPreview();
+      });
+
+      document.getElementById("bucketQty").addEventListener("input", (e) => {
+        const v = parseInt(e.target.value || "1", 10);
+        bucketState.qty = Number.isFinite(v) ? Math.max(1, v) : 1;
+        e.target.value = bucketState.qty;
+      });
+
+      renderBucketChips();
+      renderBucketNote();
+      syncBucketPreview();
+    }
+
+    function renderBucketChips(){
+      document.querySelectorAll("#bucketChips .chip").forEach(ch => {
+        const f = ch.getAttribute("data-flavor");
+        ch.classList.toggle("active", bucketState.flavors.includes(f));
+      });
+    }
+
+    function renderBucketNote(){
+      const note = document.getElementById("bucketNote");
+      if(!note) return;
+      if(bucketState.flavors.length === 0){
+        note.textContent = "Selecione 1 ou 2 sabores.";
+      } else if(bucketState.flavors.length === 1){
+        note.textContent = `Selecionado: ${bucketState.flavors[0]} (você pode escolher mais 1).`;
+      } else {
+        note.textContent = `Selecionados: ${bucketState.flavors.join(" + ")}.`;
+      }
+    }
+
+    function showBucketError(msg){
+      const el = document.getElementById("bucketError");
+      if(!el) return;
+      el.textContent = msg;
+      el.style.display = "block";
+    }
+    function hideBucketError(){
+      const el = document.getElementById("bucketError");
+      if(!el) return;
+      el.textContent = "";
+      el.style.display = "none";
+    }
+
+    function resetBucket(){
+      bucketState.size = document.getElementById("bucketSize").value || "M";
+      bucketState.qty = 1;
+      bucketState.flavors = [];
+      document.getElementById("bucketQty").value = "1";
+      hideBucketError();
+      renderBucketChips();
+      renderBucketNote();
+      syncBucketPreview();
+    }
+
+    // Carrega SEM cortar e com fallback de nomes (Balde P.png vs balde P.png etc.)
+    function loadBucketImageWithFallback(imgEl, placeholderEl, candidates, alt){
+      let i = 0;
+
+      function tryNext(){
+        if(i >= candidates.length){
+          imgEl.style.display = "none";
+          placeholderEl.style.display = "block";
+          return;
+        }
+        const src = candidates[i++];
+        imgEl.onload = () => {
+          placeholderEl.style.display = "none";
+          imgEl.style.display = "block";
+        };
+        imgEl.onerror = () => tryNext();
+        imgEl.src = src;
+      }
+
+      imgEl.alt = alt;
+      imgEl.style.display = "none";
+      placeholderEl.style.display = "block";
+      tryNext();
+    }
+
+    function syncBucketPreview(){
+      const size = bucketState.size; // P/M/G
+      const price = BUCKET_PRICES[size];
+
+      document.getElementById("bucketSelectedSize").textContent = `Balde ${size}`;
+      document.getElementById("bucketSelectedPrice").textContent = `Valor unitário: ${formatBRL(price)}`;
+      document.getElementById("bucketUnitPrice").textContent = formatBRL(price);
+
+      const photo = document.getElementById("bucketPhoto");
+      const ph = document.getElementById("bucketPhotoPlaceholder");
+      ph.textContent = `Foto do Balde ${size}`;
+
+      const candidatesBySize = {
+        P: ["Balde P.png", "balde P.png", "Balde P.PNG", "balde P.PNG"],
+        M: ["balde M.png", "Balde M.png", "balde M.PNG", "Balde M.PNG"],
+        G: ["balde G.png", "Balde G.png", "balde G.PNG", "Balde G.PNG"],
+      };
+
+      loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Balde ${size}`);
+    }
+
+    function addBucketToCart(){
+      const size = document.getElementById("bucketSize").value || "M";
+      const qty = Math.max(1, parseInt(document.getElementById("bucketQty").value || "1", 10) || 1);
+
+      if(bucketState.flavors.length < 1){
+        showBucketError("Escolha pelo menos 1 sabor.");
+        return;
+      }
+      if(bucketState.flavors.length > 2){
+        showBucketError("Escolha no máximo 2 sabores.");
+        return;
+      }
+
+      const flavors = [...bucketState.flavors].sort();
+      const configKey = `bucket:${size}:${flavors.join("+")}`;
+
+      if(!cart[configKey]){
+        cart[configKey] = {
+          key: configKey,
+          type: "bucket",
+          size,
+          flavors,
+          qty: 0,
+          price: BUCKET_PRICES[size]
+        };
+      }
+      cart[configKey].qty += qty;
+
+      updateCartUI();
+      openCart();
+    }
+
+    function incQty(key){
+      if(!cart[key]) return;
+      cart[key].qty += 1;
+      updateCartUI();
+    }
+
+    function decQty(key){
+      if(!cart[key]) return;
+      cart[key].qty -= 1;
+      if(cart[key].qty <= 0) delete cart[key];
+      updateCartUI();
+    }
+
+    function removeItem(key){
+      if(cart[key]) delete cart[key];
+      updateCartUI();
+    }
+
+    function clearCart(){
+      for(const k of Object.keys(cart)) delete cart[k];
+      updateCartUI();
+    }
+
+    function calculateTotals(){
+      let total = 0;
+      for(const item of Object.values(cart)){
+        let unit = 0;
+        if(item.type === "product"){
+          unit = catalog[item.productId]?.price ?? 0;
+        } else if(item.type === "bucket"){
+          unit = item.price ?? 0;
+        }
+        total += unit * item.qty;
+      }
+      return { total };
+    }
+
+    function updateCartUI(){
+      document.getElementById("year").textContent = new Date().getFullYear();
+      document.getElementById("cartBadge").textContent = String(cartCount());
+
+      const body = document.getElementById("cartBody");
+      const totalsBox = document.getElementById("totalsBox");
+      const items = Object.values(cart);
+
+      if(items.length === 0){
+        body.innerHTML = `<div class="cart-empty">Seu carrinho está vazio. Adicione um item para montar o pedido.</div>`;
+        totalsBox.innerHTML = `
+          <div class="line"><span class="label">Itens</span><span class="value">0</span></div>
+          <div class="line"><span class="label">Total</span><span class="value">—</span></div>
+        `;
+        return;
+      }
+
+      items.sort((a,b) => (a.type > b.type ? 1 : -1));
+
+      body.innerHTML = items.map(item => {
+        let name = "";
+        let meta = "";
+        let unitPrice = 0;
+
+        if(item.type === "product"){
+          const prod = catalog[item.productId];
+          name = prod?.name ?? "Produto";
+          meta = `Saquinho ${prod?.grams ?? 100}g • ${prod?.category ?? "—"}`;
+          unitPrice = prod?.price ?? 0;
+        } else {
+          name = `Balde ${item.size}`;
+          meta = `Sabores: ${item.flavors.join(" + ")}`;
+          unitPrice = item.price ?? 0;
+        }
+
+        return `
+          <div class="cart-item">
+            <div class="row">
+              <div>
+                <div class="name">${escapeHtml(name)}</div>
+                <div class="meta">
+                  ${escapeHtml(meta)}<br>
+                  Valor unitário: <strong>${escapeHtml(formatBRL(unitPrice))}</strong><br>
+                  Subtotal: <strong>${escapeHtml(formatBRL(unitPrice * item.qty))}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="qty" aria-label="Quantidade">
+              <button type="button" onclick="decQty('${item.key}')">−</button>
+              <div class="count">${item.qty}</div>
+              <button type="button" onclick="incQty('${item.key}')">+</button>
+            </div>
+
+            <button class="remove" type="button" onclick="removeItem('${item.key}')">Remover</button>
+          </div>
+        `;
+      }).join("");
+
+      const { total } = calculateTotals();
+      totalsBox.innerHTML = `
+        <div class="line">
+          <span class="label">Itens</span>
+          <span class="value">${cartCount()}</span>
+        </div>
+        <div class="line">
+          <span class="label">Total</span>
+          <span class="value">${formatBRL(total)}</span>
+        </div>
+      `;
+    }
+
+    function checkoutWhatsApp(){
+      const items = Object.values(cart);
+      if(items.length === 0){
+        openWhatsApp("Olá! Gostaria de fazer um pedido, mas meu carrinho está vazio. Pode me ajudar?");
+        return;
+      }
+
+      const lines = [];
+      lines.push("Olá! Quero fazer um pedido na *Toque Gourmet Especial* (pipocas gourmet).");
+      lines.push("");
+      lines.push("*Itens do pedido:*");
+
+      const trad = [];
+      const vip = [];
+      const buckets = [];
+
+      for(const item of items){
+        if(item.type === "product"){
+          const prod = catalog[item.productId];
+          const obj = { name: prod.name, qty: item.qty, price: prod.price, grams: prod.grams };
+          if(prod.category === "Tradicional") trad.push(obj);
+          else vip.push(obj);
+        } else {
+          buckets.push({ size: item.size, flavors: item.flavors, qty: item.qty, price: item.price });
+        }
+      }
+
+      function addGroup(title, groupLines){
+        if(groupLines.length === 0) return;
+        lines.push(`- ${title}`);
+        groupLines.forEach(l => lines.push(`  • ${l}`));
+      }
+
+      addGroup("Saquinhos Tradicionais (100g)", trad
+        .sort((a,b)=>a.name.localeCompare(b.name))
+        .map(x => `${x.qty}x ${x.name} (${x.grams}g) (un: ${formatBRL(x.price)})`)
+      );
+
+      addGroup("Saquinhos VIP (100g)", vip
+        .sort((a,b)=>a.name.localeCompare(b.name))
+        .map(x => `${x.qty}x ${x.name} (${x.grams}g) (un: ${formatBRL(x.price)})`)
+      );
+
+      addGroup("Baldes", buckets
+        .map(b => `${b.qty}x Balde ${b.size} - ${b.flavors.join(" + ")} (un: ${formatBRL(b.price)})`)
+      );
+
+      const { total } = calculateTotals();
+      lines.push("");
+      lines.push(`*Total:* ${formatBRL(total)}`);
+      lines.push("");
+      lines.push("Pode confirmar o pedido e me passar o prazo?");
+
+      openWhatsApp(lines.join("\n"));
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /* ===== Bandejas ===== */
+    function setTrayHeight(trayEl, open){
+      const body = trayEl.querySelector(".tray-body");
+      const inner = trayEl.querySelector(".tray-inner");
+      if(!body || !inner) return;
+      body.style.height = open ? (inner.scrollHeight + "px") : "0px";
+    }
+
+    function toggleTray(trayId){
+      const tray = document.getElementById(trayId);
+      if(!tray) return;
+
+      const isOpen = tray.classList.contains("open");
+      tray.classList.toggle("open", !isOpen);
+
+      const lid = tray.querySelector(".tray-lid");
+      if(lid) lid.setAttribute("aria-expanded", String(!isOpen));
+
+      const pill = tray.querySelector(".pill");
+      if(pill) pill.textContent = !isOpen ? "Fechar" : "Abrir";
+
+      setTrayHeight(tray, !isOpen);
+    }
+
+    function handleResize(){
+      document.querySelectorAll(".tray.open").forEach(tray => setTrayHeight(tray, true));
+    }
+
+    /* ===== Hero Slider ===== */
+    let heroIndex = 0;
+    let heroTimer = null;
+
+    function heroSlides(){
+      return Array.from(document.querySelectorAll(".hero-image .slide"));
+    }
+
+    function showHero(idx){
+      const slides = heroSlides();
+      if(slides.length === 0) return;
+
+      heroIndex = (idx + slides.length) % slides.length;
+      slides.forEach((s,i)=>s.classList.toggle("active", i === heroIndex));
+    }
+
+    function nextHero(){
+      showHero(heroIndex + 1);
+      restartHeroTimer();
+    }
+
+    function prevHero(){
+      showHero(heroIndex - 1);
+      restartHeroTimer();
+    }
+
+    function restartHeroTimer(){
+      if(heroTimer) clearInterval(heroTimer);
+      heroTimer = setInterval(()=> showHero(heroIndex + 1), 6500);
+    }
+
+    /* ===== Pipocas ===== */
+    function startPopcornBurst() {
+      const overlay = document.getElementById("popOverlay");
+      if (!overlay) return;
+
+      overlay.innerHTML = "";
+      const count = 30;
+
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const originY = h - 10;
+
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement("div");
+        el.className = "popcorn";
+        el.style.setProperty("--pop-img", `url('${POPCORN_IMG_FILE}')`);
+
+        const startX = (w * 0.5) + (Math.random() * 360 - 180);
+        el.style.left = startX + "px";
+        el.style.top = originY + "px";
+
+        const size = 42 + Math.round(Math.random() * 52);
+        el.style.width = size + "px";
+        el.style.height = size + "px";
+
+        const side = (Math.random() < 0.5) ? -1 : 1;
+
+        const x0 = (Math.random() * 80) - 40;
+        const y0 = (Math.random() * 16) - 8;
+
+        const x1 = side * (w * (0.10 + Math.random() * 0.18)) + (Math.random() * 80 - 40);
+        const y1 = -(h * (0.18 + Math.random() * 0.22));
+
+        const x2 = side * (w * (0.65 + Math.random() * 0.55));
+        const y2 =  (h * (0.30 + Math.random() * 0.55));
+
+        const r0 = (Math.random() * 60) - 30;
+        const r1 = r0 + side * (260 + Math.random() * 360);
+        const r2 = r1 + side * (420 + Math.random() * 520);
+
+        const s0 = 0.70 + Math.random() * 0.25;
+        const s1 = 0.90 + Math.random() * 0.20;
+        const s2 = 0.85 + Math.random() * 0.25;
+
+        el.style.setProperty("--x0", `${x0}px`);
+        el.style.setProperty("--y0", `${y0}px`);
+        el.style.setProperty("--x1", `${x1}px`);
+        el.style.setProperty("--y1", `${y1}px`);
+        el.style.setProperty("--x2", `${x2}px`);
+        el.style.setProperty("--y2", `${y2}px`);
+        el.style.setProperty("--r0", `${r0}deg`);
+        el.style.setProperty("--r1", `${r1}deg`);
+        el.style.setProperty("--r2", `${r2}deg`);
+        el.style.setProperty("--s0", `${s0}`);
+        el.style.setProperty("--s1", `${s1}`);
+        el.style.setProperty("--s2", `${s2}`);
+
+        const dur = 1800 + Math.round(Math.random() * 1200);
+        const delay = Math.round(Math.random() * 260);
+        el.style.animation = `popFallSide ${dur}ms cubic-bezier(.14,.88,.20,1) ${delay}ms forwards`;
+
+        overlay.appendChild(el);
+      }
+
+      setTimeout(() => { overlay.innerHTML = ""; }, 3600);
+    }
+
+    window.addEventListener("load", () => {
+      document.getElementById("year").textContent = new Date().getFullYear();
+      updateCartUI();
+      initBucketUI();
+      showHero(0);
+      restartHeroTimer();
+      startPopcornBurst();
+    });
+
+    window.addEventListener("resize", handleResize);
+  </script>
+</body>
+</html>
