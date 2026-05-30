@@ -1225,13 +1225,30 @@
               </article>
 
               <article class="card">
-                <div class="img"><img src="alpino.png" alt="Alpino"></div>
+                <div class="img">
+                  <img
+                    src="Pé de molque.png"
+                    alt="Morango"
+                    onerror="this.onerror=null; this.src='Pé de moleque.png';"
+                  >
+                </div>
                 <div class="body">
-                  <h3>Alpino</h3>
+                  <h3>Morango</h3>
                   <div class="meta-pill">Saquinho 100g</div>
-                  <p>Chocolate intenso, final premium.</p>
+                  <p>Doce, cremoso e com aquele toque frutado.</p>
                   <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('alpino')">Adicionar</button>
+                  <button class="btn-cart" type="button" onclick="addToCart('morango')">Adicionar</button>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="img"><img src="Morango.png" alt="Pé de Moleque"></div>
+                <div class="body">
+                  <h3>Pé de Moleque</h3>
+                  <div class="meta-pill">Saquinho 100g</div>
+                  <p>Crocante, caramelizado e cheio de amendoim.</p>
+                  <div class="price">Valor: R$ 17,00</div>
+                  <button class="btn-cart" type="button" onclick="addToCart('pe_moleque')">Adicionar</button>
                 </div>
               </article>
             </div>
@@ -1327,7 +1344,7 @@
         <button class="tray-lid" type="button" aria-expanded="false" onclick="toggleTray('tray-buckets')">
           <div class="tray-title">
             <strong>Baldes</strong>
-            <span>Balde P: R$ 22,50 • Balde M: R$ 32,50 • Balde G: R$ 42,50</span>
+            <span>Balde P: R$ 25,00 • Balde M: R$ 35,00 • Balde G: R$ 45,00</span>
           </div>
           <div class="tray-badge">
             <div class="pill">Abrir</div>
@@ -1360,7 +1377,7 @@
 
                   <div class="info">
                     <div class="line">Tamanho selecionado: <span id="bucketSelectedSize">Balde M</span></div>
-                    <div class="small" id="bucketSelectedPrice">Valor unitário: R$ 32,50</div>
+                    <div class="small" id="bucketSelectedPrice">Valor unitário: R$ 35,00</div>
                     <div class="small">
                       Arquivos aceitos automaticamente (com variações de nome):<br>
                       <strong>Balde P.png</strong> / <strong>balde P.png</strong> •
@@ -1396,11 +1413,13 @@
 
                   <div class="chips" id="bucketChips">
                     <div class="chip" data-flavor="Ninho">Ninho</div>
-                    <div class="chip" data-flavor="Nutella">Nutella</div>
                     <div class="chip" data-flavor="Kinder Bueno">Kinder Bueno</div>
+                    <div class="chip" data-flavor="Nutella">Nutella</div>
                     <div class="chip" data-flavor="Ovomaltine">Ovomaltine</div>
                     <div class="chip" data-flavor="Cookies">Cookies</div>
-                    <div class="chip" data-flavor="Trufa">Trufa</div>
+                    <div class="chip" data-flavor="Kit Kat">Kit Kat</div>
+                    <div class="chip" data-flavor="Galak">Galak</div>
+                    <div class="chip" data-flavor="Amendoim">Amendoim</div>
                   </div>
 
                   <div class="bucket-error" id="bucketError"></div>
@@ -1412,7 +1431,7 @@
 
                   <div class="bucket-price">
                     <div class="label">Valor do balde (unitário)</div>
-                    <div class="value" id="bucketUnitPrice">R$ 32,50</div>
+                    <div class="value" id="bucketUnitPrice">R$ 35,00</div>
                   </div>
                 </div>
 
@@ -1516,13 +1535,14 @@
 
     const PRICE_TRAD = 17.00; // saquinho 100g
     const PRICE_VIP  = 20.00; // saquinho 100g
-    const BUCKET_PRICES = { P: 22.50, M: 32.50, G: 42.50 };
+    const BUCKET_PRICES = { P: 25.00, M: 35.00, G: 45.00 };
 
     const catalog = {
       mousse_maracuja: { id:"mousse_maracuja", name:"Mousse de Maracujá", category:"Tradicional", grams:100, price: PRICE_TRAD },
       mousse_limao:    { id:"mousse_limao",    name:"Mousse de Limão",    category:"Tradicional", grams:100, price: PRICE_TRAD },
       ninho:           { id:"ninho",           name:"Ninho",              category:"Tradicional", grams:100, price: PRICE_TRAD },
-      alpino:          { id:"alpino",          name:"Alpino",             category:"Tradicional", grams:100, price: PRICE_TRAD },
+      morango:         { id:"morango",         name:"Morango",            category:"Tradicional", grams:100, price: PRICE_TRAD },
+      pe_moleque:      { id:"pe_moleque",      name:"Pé de Moleque",      category:"Tradicional", grams:100, price: PRICE_TRAD },
 
       ovomaltine:      { id:"ovomaltine",      name:"Ovomaltine",         category:"VIP", grams:100, price: PRICE_VIP },
       ninho_nutella:   { id:"ninho_nutella",   name:"Ninho com Nutella",  category:"VIP", grams:100, price: PRICE_VIP },
