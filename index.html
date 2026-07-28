@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Toque Gourmet Especial | Pipocas Gourmet</title>
 
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="apple-touch-icon" href="logo.jpg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#b8892f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Toque Gourmet">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -639,6 +646,32 @@
     }
     .qty-input{ font-weight: 800; letter-spacing: .4px; }
 
+    .bucket-qty{
+      display:flex;
+      align-items:stretch;
+      gap: 6px;
+    }
+    .bucket-qty .qty-input{
+      flex: 1 1 auto;
+      min-width: 0;
+      text-align:center;
+    }
+    .bucket-qty-btn{
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      background: var(--gold);
+      border:0;
+      color:#fff;
+      font-weight:900;
+      font-size: 16px;
+      line-height:1;
+      cursor:pointer;
+      transition: filter .14s ease, transform .14s ease;
+    }
+    .bucket-qty-btn:hover{ filter: brightness(.96); transform: translateY(-1px); }
+    .bucket-qty-btn:active{ transform: translateY(0) scale(.95); }
+
     .flavors-box{
       margin-top: 12px;
       border-top: 1px solid rgba(0,0,0,.08);
@@ -1041,7 +1074,7 @@
       filter: drop-shadow(0 14px 18px rgba(0,0,0,.22));
       will-change: transform, opacity;
     }
-    @keyframes popFallSide{
+    @keyframes popExplode{
       0%{ opacity: 0; transform: translate(var(--x0), var(--y0)) scale(var(--s0)) rotate(var(--r0)); }
       12%{ opacity: 1; }
       35%{ opacity: 1; transform: translate(var(--x1), var(--y1)) scale(var(--s1)) rotate(var(--r1)); }
@@ -1088,8 +1121,11 @@
 
       <div class="brand" aria-label="Toque Gourmet Especial">
         <div class="logo-round">
-          <img src="logo.jpg" alt="Logo Toque Gourmet Especial"
-               onerror="this.remove(); document.getElementById('logoFallback').style.display='block';">
+          <picture>
+            <source type="image/webp" srcset="logo.webp">
+            <img src="logo.jpg" alt="Logo Toque Gourmet Especial"
+                 onerror="this.remove(); document.getElementById('logoFallback').style.display='block';">
+          </picture>
           <div id="logoFallback" class="logo-fallback" style="display:none;">TGE</div>
         </div>
 
@@ -1126,7 +1162,10 @@
         <!-- SLIDE 1 (texto) -->
         <div class="slide active" data-slide="0">
           <div class="hero-bg">
-            <img src="painel.png" alt="Painel principal">
+            <picture>
+              <source type="image/webp" srcset="painel.webp">
+              <img src="painel.png" alt="Painel principal">
+            </picture>
           </div>
           <div class="hero-text">
             <div class="hero-panel">
@@ -1141,7 +1180,10 @@
      target="_blank" rel="noopener noreferrer"
      aria-label="Abrir Toque Gourmet Especial no iFood">
     <div class="hero-bg">
-      <img src="painel 2.png" alt="Painel iFood">
+      <picture>
+        <source type="image/webp" srcset="painel 2.webp">
+        <img src="painel 2.png" alt="Painel iFood" loading="lazy">
+      </picture>
     </div>
   </a>
 </div>
@@ -1192,7 +1234,12 @@
           <div class="tray-inner">
             <div class="tray-grid">
               <article class="card">
-                <div class="img"><img src="Mousse de Maracujá.png" alt="Mousse de Maracujá"></div>
+                <div class="img">
+                  <picture>
+                    <source type="image/webp" srcset="Mousse de Maracujá.webp">
+                    <img src="Mousse de Maracujá.png" alt="Mousse de Maracujá" loading="lazy">
+                  </picture>
+                </div>
                 <div class="body">
                   <h3>Mousse de Maracujá</h3>
                   <div class="meta-pill">Saquinho 100g</div>
@@ -1203,7 +1250,12 @@
               </article>
 
               <article class="card">
-                <div class="img"><img src="Mousse de limão.png" alt="Mousse de Limão"></div>
+                <div class="img">
+                  <picture>
+                    <source type="image/webp" srcset="Mousse de limão.webp">
+                    <img src="Mousse de limão.png" alt="Mousse de Limão" loading="lazy">
+                  </picture>
+                </div>
                 <div class="body">
                   <h3>Mousse de Limão</h3>
                   <div class="meta-pill">Saquinho 100g</div>
@@ -1214,7 +1266,12 @@
               </article>
 
               <article class="card">
-                <div class="img"><img src="Ninho.png" alt="Ninho"></div>
+                <div class="img">
+                  <picture>
+                    <source type="image/webp" srcset="Ninho.webp">
+                    <img src="Ninho.png" alt="Ninho" loading="lazy">
+                  </picture>
+                </div>
                 <div class="body">
                   <h3>Ninho</h3>
                   <div class="meta-pill">Saquinho 100g</div>
@@ -1226,11 +1283,15 @@
 
               <article class="card">
                 <div class="img">
-                  <img
-                    src="Pé de molque.png"
-                    alt="Morango"
-                    onerror="this.onerror=null; this.src='Pé de moleque.png';"
-                  >
+                  <picture>
+                    <source type="image/webp" srcset="Pé de molque.webp">
+                    <img
+                      src="Pé de molque.png"
+                      alt="Morango"
+                      loading="lazy"
+                      onerror="this.onerror=null; this.src='Pé de moleque.png';"
+                    >
+                  </picture>
                 </div>
                 <div class="body">
                   <h3>Morango</h3>
@@ -1242,7 +1303,12 @@
               </article>
 
               <article class="card">
-                <div class="img"><img src="Morango.png" alt="Pé de Moleque"></div>
+                <div class="img">
+                  <picture>
+                    <source type="image/webp" srcset="Morango.webp">
+                    <img src="Morango.png" alt="Pé de Moleque" loading="lazy">
+                  </picture>
+                </div>
                 <div class="body">
                   <h3>Pé de Moleque</h3>
                   <div class="meta-pill">Saquinho 100g</div>
@@ -1274,7 +1340,12 @@
           <div class="tray-inner">
             <div class="tray-grid">
               <article class="card">
-                <div class="img"><img src="Ovomaltine.png" alt="Ovomaltine"></div>
+                <div class="img">
+                  <picture>
+                    <source type="image/webp" srcset="Ovomaltine.webp">
+                    <img src="Ovomaltine.png" alt="Ovomaltine" loading="lazy">
+                  </picture>
+                </div>
                 <div class="body">
                   <h3>Ovomaltine</h3>
                   <div class="meta-pill">Saquinho 100g</div>
@@ -1286,14 +1357,18 @@
 
               <article class="card">
                 <div class="img">
-                  <img
-                    src="ninho co nutella.png"
-                    alt="Ninho com Nutella"
-                    onerror="this.onerror=null;
-                             if(!this.dataset.try2){ this.dataset.try2='1'; this.src='ninho com nutella.png'; return; }
-                             if(!this.dataset.try3){ this.dataset.try3='1'; this.src='Ninho com nutella.png'; return; }
-                             this.src='Ninho com Nutella.png';"
-                  >
+                  <picture>
+                    <source type="image/webp" srcset="ninho co nutella.webp">
+                    <img
+                      src="ninho co nutella.png"
+                      alt="Ninho com Nutella"
+                      loading="lazy"
+                      onerror="this.onerror=null;
+                               if(!this.dataset.try2){ this.dataset.try2='1'; this.src='ninho com nutella.png'; return; }
+                               if(!this.dataset.try3){ this.dataset.try3='1'; this.src='Ninho com nutella.png'; return; }
+                               this.src='Ninho com Nutella.png';"
+                    >
+                  </picture>
                 </div>
                 <div class="body">
                   <h3>Ninho com Nutella</h3>
@@ -1372,7 +1447,7 @@
                 <div id="bucketPreview" class="bucket-preview" aria-label="Prévia do balde">
                   <div class="photo" id="bucketPhotoBox">
                     <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde (Balde M)</div>
-                    <img id="bucketPhoto" alt="Foto do balde" style="display:none;" />
+                    <img id="bucketPhoto" alt="Foto do balde" loading="lazy" style="display:none;" />
                   </div>
 
                   <div class="info">
@@ -1399,7 +1474,11 @@
 
                   <div class="field">
                     <label for="bucketQty">Quantidade de baldes</label>
-                    <input id="bucketQty" class="qty-input" type="number" min="1" value="1" />
+                    <div class="bucket-qty">
+                      <button type="button" class="bucket-qty-btn" onclick="changeBucketQty(-1)" aria-label="Diminuir quantidade">−</button>
+                      <input id="bucketQty" class="qty-input" type="number" min="1" value="1" />
+                      <button type="button" class="bucket-qty-btn" onclick="changeBucketQty(1)" aria-label="Aumentar quantidade">+</button>
+                    </div>
                   </div>
                 </div>
 
@@ -1548,7 +1627,24 @@
       ninho_nutella:   { id:"ninho_nutella",   name:"Ninho com Nutella",  category:"VIP", grams:100, price: PRICE_VIP },
     };
 
+    const CART_STORAGE_KEY = "tge_cart_v1";
     const cart = {};
+
+    (function loadCart(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "{}");
+        for(const key of Object.keys(saved)){
+          const item = saved[key];
+          if(!item || typeof item.qty !== "number" || item.qty <= 0) continue;
+          if(item.type === "product" && !catalog[item.productId]) continue;
+          cart[key] = item;
+        }
+      } catch(e){}
+    })();
+
+    function saveCart(){
+      try{ localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch(e){}
+    }
 
     function formatBRL(value){
       return value.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
@@ -1637,6 +1733,14 @@
       syncBucketPreview();
     }
 
+    function changeBucketQty(delta){
+      const input = document.getElementById("bucketQty");
+      const current = parseInt(input.value || "1", 10) || 1;
+      const next = Math.max(1, current + delta);
+      input.value = next;
+      bucketState.qty = next;
+    }
+
     function renderBucketChips(){
       document.querySelectorAll("#bucketChips .chip").forEach(ch => {
         const f = ch.getAttribute("data-flavor");
@@ -1718,9 +1822,9 @@
       ph.textContent = `Foto do Balde ${size}`;
 
       const candidatesBySize = {
-        P: ["Balde P.png", "balde P.png", "Balde P.PNG", "balde P.PNG"],
-        M: ["balde M.png", "Balde M.png", "balde M.PNG", "Balde M.PNG"],
-        G: ["balde G.png", "Balde G.png", "balde G.PNG", "Balde G.PNG"],
+        P: ["Balde P.webp", "Balde P.png", "balde P.png", "Balde P.PNG", "balde P.PNG"],
+        M: ["balde M.webp", "balde M.png", "Balde M.png", "balde M.PNG", "Balde M.PNG"],
+        G: ["balde G.webp", "balde G.png", "Balde G.png", "balde G.PNG", "Balde G.PNG"],
       };
 
       loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Balde ${size}`);
@@ -1796,6 +1900,8 @@
     }
 
     function updateCartUI(){
+      saveCart();
+
       document.getElementById("year").textContent = new Date().getFullYear();
       document.getElementById("cartBadge").textContent = String(cartCount());
 
@@ -1997,18 +2103,19 @@
       if (!overlay) return;
 
       overlay.innerHTML = "";
-      const count = 30;
+      const count = 45 + Math.round(Math.random() * 25); // 45–70 pipocas
 
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const originY = h - 10;
+      const originX = w * 0.5;
+      const originY = h * 0.58;
 
       for (let i = 0; i < count; i++) {
         const el = document.createElement("div");
         el.className = "popcorn";
         el.style.setProperty("--pop-img", `url('${POPCORN_IMG_FILE}')`);
 
-        const startX = (w * 0.5) + (Math.random() * 360 - 180);
+        const startX = originX + (Math.random() * 60 - 30);
         el.style.left = startX + "px";
         el.style.top = originY + "px";
 
@@ -2016,24 +2123,30 @@
         el.style.width = size + "px";
         el.style.height = size + "px";
 
-        const side = (Math.random() < 0.5) ? -1 : 1;
+        // explosão radial: cada pipoca sai em um ângulo aleatório (360°), não numa direção só
+        const angle = Math.random() * Math.PI * 2;
+        const dirX = Math.cos(angle);
+        const dirY = Math.sin(angle);
+        const spin = (Math.random() < 0.5) ? -1 : 1;
 
-        const x0 = (Math.random() * 80) - 40;
-        const y0 = (Math.random() * 16) - 8;
+        const x0 = (Math.random() * 20) - 10;
+        const y0 = (Math.random() * 20) - 10;
 
-        const x1 = side * (w * (0.10 + Math.random() * 0.18)) + (Math.random() * 80 - 40);
-        const y1 = -(h * (0.18 + Math.random() * 0.22));
+        const burst = Math.min(w, h) * (0.16 + Math.random() * 0.24);
+        const x1 = dirX * burst;
+        const y1 = dirY * burst;
 
-        const x2 = side * (w * (0.65 + Math.random() * 0.55));
-        const y2 =  (h * (0.30 + Math.random() * 0.55));
+        const gravity = h * (0.28 + Math.random() * 0.42);
+        const x2 = x1 + dirX * (30 + Math.random() * 60);
+        const y2 = y1 + gravity;
 
-        const r0 = (Math.random() * 60) - 30;
-        const r1 = r0 + side * (260 + Math.random() * 360);
-        const r2 = r1 + side * (420 + Math.random() * 520);
+        const r0 = (Math.random() * 30) - 15;
+        const r1 = r0 + spin * (70 + Math.random() * 90);
+        const r2 = r1 + spin * (110 + Math.random() * 130);
 
-        const s0 = 0.70 + Math.random() * 0.25;
-        const s1 = 0.90 + Math.random() * 0.20;
-        const s2 = 0.85 + Math.random() * 0.25;
+        const s0 = 0.75 + Math.random() * 0.20;
+        const s1 = 0.92 + Math.random() * 0.16;
+        const s2 = 0.88 + Math.random() * 0.18;
 
         el.style.setProperty("--x0", `${x0}px`);
         el.style.setProperty("--y0", `${y0}px`);
@@ -2050,12 +2163,20 @@
 
         const dur = 1800 + Math.round(Math.random() * 1200);
         const delay = Math.round(Math.random() * 260);
-        el.style.animation = `popFallSide ${dur}ms cubic-bezier(.14,.88,.20,1) ${delay}ms forwards`;
+        el.style.animation = `popExplode ${dur}ms cubic-bezier(.14,.88,.20,1) ${delay}ms forwards`;
 
         overlay.appendChild(el);
       }
 
       setTimeout(() => { overlay.innerHTML = ""; }, 3600);
+    }
+
+    const POPCORN_SEEN_KEY = "tge_popcorn_seen";
+
+    function startPopcornBurstOnce() {
+      if (localStorage.getItem(POPCORN_SEEN_KEY)) return;
+      localStorage.setItem(POPCORN_SEEN_KEY, "1");
+      startPopcornBurst();
     }
 
     window.addEventListener("load", () => {
@@ -2064,7 +2185,7 @@
       initBucketUI();
       showHero(0);
       restartHeroTimer();
-      startPopcornBurst();
+      startPopcornBurstOnce();
     });
 
     window.addEventListener("resize", handleResize);

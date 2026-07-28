@@ -1,0 +1,14 @@
+{
+  "name": "Toque Gourmet Especial",
+  "short_name": "Toque Gourmet",
+  "description": "Pipocas gourmet, baldes personalizados e opções para eventos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#b8892f",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "logo.jpg", "sizes": "150x150", "type": "image/jpeg" }
+  ]
+}
