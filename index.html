@@ -14,7 +14,25 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FoodEstablishment",
+    "name": "Toque Gourmet Especial",
+    "image": "https://toquegourmetespecial.com.br/logo.jpg",
+    "url": "https://toquegourmetespecial.com.br/",
+    "telephone": "+5519953243215",
+    "servesCuisine": "Pipoca Gourmet",
+    "priceRange": "R$17 - R$45",
+    "areaServed": "Hortolândia, SP",
+    "sameAs": [
+      "https://www.instagram.com/toque.gourmet.especial/"
+    ],
+    "description": "Pipocas gourmet artesanais, baldes personalizados e opções para eventos e lembrancinhas, com delivery em Hortolândia e região."
+  }
+  </script>
 
   <style>
     :root{
@@ -26,6 +44,9 @@
 
       --hero-panel-opacity: .20;
       --hero-grain-opacity: .22;
+
+      --radius: 16px;
+      --radius-sm: 10px;
     }
 
     *{ margin:0; padding:0; box-sizing:border-box; }
@@ -137,7 +158,7 @@
       display:block;
     }
     .logo-fallback{
-      font-family: "Cinzel", serif;
+      font-family: "Playfair Display", serif;
       font-weight: 700;
       color: var(--gold-dark);
       font-size: 14px;
@@ -148,11 +169,11 @@
       line-height:1.05;
     }
     .brand-text .title{
-      font-family: "Cinzel", serif;
+      font-family: "Playfair Display", serif;
       font-weight: 700;
-      letter-spacing: 1.5px;
+      letter-spacing: .8px;
       color: var(--gold-dark);
-      font-size: 16px;
+      font-size: 17px;
       text-transform: uppercase;
     }
     .brand-text .sub{
@@ -169,6 +190,7 @@
       height: 34px;
       background: var(--gold);
       border: 1px solid rgba(0,0,0,.05);
+      border-radius: var(--radius-sm);
       display:grid;
       place-items:center;
       cursor:pointer;
@@ -199,6 +221,7 @@
       position: relative;
       height: 250px;
       overflow: hidden;
+      border-radius: var(--radius);
       box-shadow: 0 16px 40px rgba(0,0,0,.18);
       border: 1px solid rgba(255,255,255,.45);
       background:#000;
@@ -253,10 +276,12 @@
       position: relative;
       padding: 18px 22px;
       border: 1px solid rgba(255,255,255,.22);
+      border-radius: var(--radius-sm);
       background: rgba(0,0,0, var(--hero-panel-opacity));
       box-shadow: 0 18px 45px rgba(0,0,0,.22);
       backdrop-filter: blur(2px);
       max-width: min(860px, 92vw);
+      overflow: hidden;
     }
     .hero-panel::before{
       content:"";
@@ -284,14 +309,14 @@
     .hero-text h1{
       position: relative;
       z-index:1;
-      font-family:"Cinzel", serif;
-      font-size: 34px;
-      letter-spacing: 3px;
+      font-family:"Playfair Display", serif;
+      font-size: 36px;
+      letter-spacing: 1px;
       color:#fff;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
       text-shadow: 0 14px 30px rgba(0,0,0,.45);
-      line-height: 1.05;
+      line-height: 1.15;
     }
 
     .hero-arrows{
@@ -322,30 +347,13 @@
     .hero-arrow:hover{ transform: translateY(-1px); filter: brightness(.97); }
     .hero-arrow svg{ width:16px; height:16px; fill:#fff; }
 
-    .section-dot{
-      width: 36px;
-      height: 36px;
-      margin: -18px auto 14px;
-      border-radius: 999px;
-      background: var(--gold);
-      border: 3px solid rgba(255,255,255,.85);
-      box-shadow: 0 16px 28px rgba(0,0,0,.18);
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      transition: transform .15s ease;
-      position: relative;
-      z-index: 10;
-    }
-    .section-dot:hover{ transform: translateY(-2px); }
-    .section-dot svg{ width:14px; height:14px; fill:#fff; opacity:.95; }
-
     .flavors{ max-width: 1240px; margin: 0 auto; padding: 0 22px 22px; }
 
     /* Bandejas */
     .trays{
       background: rgba(255,255,255,.45);
       border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
       box-shadow: 0 12px 26px rgba(0,0,0,.08);
       padding: 18px 14px 14px;
     }
@@ -353,6 +361,7 @@
       position: relative;
       margin: 16px 0;
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius-sm);
       background: rgba(255,255,255,.55);
       box-shadow: 0 14px 26px rgba(0,0,0,.10);
       overflow: hidden;
@@ -392,9 +401,9 @@
       z-index:1;
     }
     .tray-title strong{
-      font-family:"Cinzel", serif;
-      font-size: 14px;
-      letter-spacing: 2px;
+      font-family:"Playfair Display", serif;
+      font-size: 15px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: rgba(0,0,0,.78);
     }
@@ -417,7 +426,8 @@
       text-transform: uppercase;
       color: #fff;
       background: var(--gold);
-      padding: 7px 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
       box-shadow: 0 10px 18px rgba(138,97,22,.16);
     }
     .caret{
@@ -426,6 +436,7 @@
       display:grid;
       place-items:center;
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: 999px;
       background: rgba(255,255,255,.90);
       transition: transform .22s ease;
     }
@@ -452,6 +463,7 @@
     .card{
       background: rgba(255,255,255,.55);
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius-sm);
       box-shadow: 0 12px 20px rgba(0,0,0,.10);
       overflow:hidden;
       transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -505,8 +517,9 @@
       letter-spacing: 1.1px;
       text-transform: uppercase;
       color: rgba(0,0,0,.70);
-      padding: 7px 10px;
+      padding: 7px 12px;
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: 999px;
       background: rgba(255,255,255,.78);
       width: fit-content;
       box-shadow: 0 10px 16px rgba(0,0,0,.06);
@@ -523,6 +536,7 @@
     .btn-cart{
       align-self:center;
       border: 0;
+      border-radius: var(--radius-sm);
       background: var(--gold);
       color:#fff;
       font-weight: 900;
@@ -542,6 +556,7 @@
 
     .bucket-config{
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius);
       background: rgba(255,255,255,.75);
       box-shadow: 0 12px 20px rgba(0,0,0,.08);
       padding: 14px 12px 12px;
@@ -555,9 +570,9 @@
       margin-bottom: 10px;
     }
     .bucket-title h3{
-      font-family:"Cinzel", serif;
-      font-size: 13px;
-      letter-spacing: 1.6px;
+      font-family:"Playfair Display", serif;
+      font-size: 15px;
+      letter-spacing: .8px;
       text-transform: uppercase;
       color: rgba(0,0,0,.78);
       margin:0;
@@ -574,6 +589,7 @@
     .bucket-preview{
       margin-top: 12px;
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius-sm);
       background: rgba(255,255,255,.88);
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       padding: 10px;
@@ -585,6 +601,7 @@
       width: 220px;
       height: 170px; /* mais alto para não cortar */
       border: 1px dashed rgba(0,0,0,.25);
+      border-radius: 10px;
       background: rgba(255,255,255,.75);
       display:grid;
       place-items:center;
@@ -639,6 +656,7 @@
     .select, .qty-input{
       height: 36px;
       border: 1px solid rgba(0,0,0,.12);
+      border-radius: 8px;
       background: #fff;
       padding: 0 10px;
       font-size: 12px;
@@ -662,6 +680,7 @@
       height: 36px;
       background: var(--gold);
       border:0;
+      border-radius: 8px;
       color:#fff;
       font-weight:900;
       font-size: 16px;
@@ -696,8 +715,9 @@
     }
     .chip{
       border: 1px solid rgba(0,0,0,.12);
+      border-radius: 999px;
       background: rgba(255,255,255,.90);
-      padding: 8px 10px;
+      padding: 8px 14px;
       font-size: 12px;
       cursor:pointer;
       transition: transform .12s ease, filter .12s ease, background .12s ease, border-color .12s ease;
@@ -717,6 +737,7 @@
     }
     .btn-secondary{
       border: 1px solid rgba(0,0,0,.12);
+      border-radius: var(--radius-sm);
       background:#fff;
       color: rgba(0,0,0,.72);
       font-weight:900;
@@ -744,6 +765,7 @@
       justify-content:space-between;
       gap: 10px;
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: 10px;
       background: rgba(255,255,255,.88);
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       padding: 10px;
@@ -771,13 +793,14 @@
     .events-panel{
       background: rgba(255,255,255,.45);
       border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
       box-shadow: 0 12px 26px rgba(0,0,0,.08);
       padding: 18px 16px;
     }
     .events-panel h2{
-      font-family:"Cinzel", serif;
-      font-size: 18px;
-      letter-spacing: 2px;
+      font-family:"Playfair Display", serif;
+      font-size: 20px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: rgba(0,0,0,.75);
       margin-bottom: 10px;
@@ -796,6 +819,7 @@
     }
     .btn-primary{
       border:0;
+      border-radius: var(--radius-sm);
       background: var(--gold);
       color:#fff;
       font-weight:900;
@@ -819,6 +843,7 @@
     .footer-panel{
       background: rgba(255,255,255,.85);
       border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
       box-shadow: 0 12px 22px rgba(0,0,0,.08);
       padding: 18px 18px 16px;
     }
@@ -852,14 +877,16 @@
       width: min(560px, 100%);
       height: 34px;
       border: 1px solid rgba(0,0,0,.12);
+      border-radius: 999px;
       background:#fff;
+      overflow:hidden;
     }
     .footer-search input{
       width:100%;
       height:100%;
       border:0;
       outline:0;
-      padding: 0 10px;
+      padding: 0 16px;
       font-size: 12px;
     }
     .footer-search button{
@@ -871,6 +898,13 @@
       border-left: 1px solid rgba(0,0,0,.10);
     }
     .footer-search button svg{ width:16px; height:16px; fill: var(--gold-dark); }
+    .search-status{
+      text-align:center;
+      margin-top: 10px;
+      font-size: 11px;
+      min-height: 14px;
+      color: rgba(0,0,0,.55);
+    }
     .fine{
       text-align:center;
       margin-top: 12px;
@@ -906,11 +940,13 @@
       background: rgba(255,255,255,.96);
       backdrop-filter: blur(10px);
       border-left: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius) 0 0 var(--radius);
       box-shadow: -20px 0 60px rgba(0,0,0,.22);
       z-index: 1300;
       transition: right .20s ease;
       display:flex;
       flex-direction:column;
+      overflow:hidden;
     }
     .cart-drawer.open{ right:0; }
 
@@ -924,9 +960,9 @@
     }
     .cart-head h3{
       margin:0;
-      font-family:"Cinzel", serif;
-      font-size: 16px;
-      letter-spacing: 1.2px;
+      font-family:"Playfair Display", serif;
+      font-size: 18px;
+      letter-spacing: .6px;
       color: var(--gold-dark);
       text-transform: uppercase;
     }
@@ -934,6 +970,7 @@
       width: 34px;
       height: 34px;
       border:1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius-sm);
       background:#fff;
       cursor:pointer;
       display:grid;
@@ -956,6 +993,7 @@
     }
     .cart-item{
       border: 1px solid rgba(0,0,0,.08);
+      border-radius: 10px;
       background: rgba(255,255,255,.88);
       padding: 10px 10px;
       margin-bottom: 10px;
@@ -990,6 +1028,7 @@
       height: 28px;
       background: var(--gold);
       border:0;
+      border-radius: 8px;
       color:#fff;
       font-weight:900;
       cursor:pointer;
@@ -1024,6 +1063,7 @@
     }
     .totals{
       border: 1px solid rgba(0,0,0,.10);
+      border-radius: 10px;
       background: rgba(255,255,255,.88);
       padding: 10px 10px;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
@@ -1043,6 +1083,7 @@
     .btn-outline{
       flex: 1 1 auto;
       border:1px solid rgba(0,0,0,.12);
+      border-radius: var(--radius-sm);
       background:#fff;
       color: rgba(0,0,0,.72);
       font-weight:900;
@@ -1075,9 +1116,17 @@
       will-change: transform, opacity;
     }
     @keyframes popExplode{
-      0%{ opacity: 0; transform: translate(var(--x0), var(--y0)) scale(var(--s0)) rotate(var(--r0)); }
-      12%{ opacity: 1; }
-      35%{ opacity: 1; transform: translate(var(--x1), var(--y1)) scale(var(--s1)) rotate(var(--r1)); }
+      0%{
+        opacity: 0;
+        transform: translate(var(--x0), var(--y0)) scale(var(--s0)) rotate(var(--r0));
+        animation-timing-function: ease-out;
+      }
+      14%{ opacity: 1; }
+      40%{
+        opacity: 1;
+        transform: translate(var(--x1), var(--y1)) scale(var(--s1)) rotate(var(--r1));
+        animation-timing-function: ease-in-out;
+      }
       100%{ opacity: 0; transform: translate(var(--x2), var(--y2)) scale(var(--s2)) rotate(var(--r2)); }
     }
 
@@ -1205,11 +1254,6 @@
       </div>
     </div>
 
-    <div class="section-dot" onclick="document.getElementById('sabores').scrollIntoView({behavior:'smooth'})" title="Ver sabores">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
-      </svg>
-    </div>
   </section>
 
   <!-- SABORES -->
@@ -1403,11 +1447,6 @@
         </div>
       </div>
 
-      <div class="section-dot" onclick="document.getElementById('baldes').scrollIntoView({behavior:'smooth'})" title="Ver baldes">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
-        </svg>
-      </div>
     </div>
   </section>
 
@@ -1447,7 +1486,7 @@
                 <div id="bucketPreview" class="bucket-preview" aria-label="Prévia do balde">
                   <div class="photo" id="bucketPhotoBox">
                     <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde (Balde M)</div>
-                    <img id="bucketPhoto" alt="Foto do balde" loading="lazy" style="display:none;" />
+                    <img id="bucketPhoto" alt="Foto do balde" style="display:none;" />
                   </div>
 
                   <div class="info">
@@ -1520,12 +1559,6 @@
         </div>
       </div>
 
-      <div class="section-dot" onclick="document.getElementById('eventos').scrollIntoView({behavior:'smooth'})" title="Eventos">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 16.5l-6-6 1.41-1.41L12 13.67l4.59-4.58L18 10.5z"/>
-        </svg>
-      </div>
-
     </div>
   </section>
 
@@ -1565,15 +1598,17 @@
           </a>
         </div>
 
-        <div class="footer-search" role="search" aria-label="Pesquisar sabores">
-          <input type="search" placeholder="Pesquisar..." />
-          <button type="button" aria-label="Buscar" onclick="alert('Pesquisa opcional (podemos implementar depois).')">
+        <form class="footer-search" role="search" aria-label="Pesquisar sabores" onsubmit="event.preventDefault(); runSiteSearch();">
+          <input id="searchInput" type="search" placeholder="Pesquisar sabores..." oninput="runSiteSearch()" />
+          <button type="submit" aria-label="Buscar">
             <svg viewBox="0 0 24 24">
               <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
             </svg>
           </button>
-        </div>
+        </form>
       </div>
+
+      <div class="search-status" id="searchStatus" aria-live="polite"></div>
 
       <div class="fine">
         © <span id="year"></span> Toque Gourmet Especial
@@ -2066,6 +2101,66 @@
       document.querySelectorAll(".tray.open").forEach(tray => setTrayHeight(tray, true));
     }
 
+    /* ===== Busca de sabores ===== */
+    function normalizeSearch(str){
+      return String(str)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "");
+    }
+
+    function runSiteSearch(){
+      const input = document.getElementById("searchInput");
+      const status = document.getElementById("searchStatus");
+      if(!input || !status) return;
+
+      const rawQuery = input.value.trim();
+      const query = normalizeSearch(rawQuery);
+      const trays = ["tray-trad", "tray-vip"].map(id => document.getElementById(id)).filter(Boolean);
+
+      if(!query){
+        trays.forEach(tray => {
+          tray.querySelectorAll(".card").forEach(card => { card.style.display = ""; });
+          if(tray.classList.contains("open")) setTrayHeight(tray, true);
+        });
+        status.textContent = "";
+        return;
+      }
+
+      let totalMatches = 0;
+
+      trays.forEach(tray => {
+        let trayMatches = 0;
+
+        tray.querySelectorAll(".card").forEach(card => {
+          const h3 = card.querySelector("h3");
+          const p = card.querySelector("p");
+          const text = normalizeSearch(`${h3 ? h3.textContent : ""} ${p ? p.textContent : ""}`);
+          const match = text.includes(query);
+          card.style.display = match ? "" : "none";
+          if(match) trayMatches++;
+        });
+
+        totalMatches += trayMatches;
+
+        const shouldOpen = trayMatches > 0;
+        const isOpen = tray.classList.contains("open");
+        if(shouldOpen !== isOpen){
+          toggleTray(tray.id);
+        } else if(isOpen){
+          setTrayHeight(tray, true);
+        }
+      });
+
+      if(totalMatches === 0){
+        status.textContent = `Nenhum sabor encontrado para "${rawQuery}".`;
+      } else if(totalMatches === 1){
+        status.textContent = "1 sabor encontrado.";
+      } else {
+        status.textContent = `${totalMatches} sabores encontrados.`;
+      }
+    }
+
     /* ===== Hero Slider ===== */
     let heroIndex = 0;
     let heroTimer = null;
@@ -2103,7 +2198,7 @@
       if (!overlay) return;
 
       overlay.innerHTML = "";
-      const count = 45 + Math.round(Math.random() * 25); // 45–70 pipocas
+      const count = 150 + Math.round(Math.random() * 70); // 150–220 pipocas, tela quase cheia
 
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -2115,11 +2210,13 @@
         el.className = "popcorn";
         el.style.setProperty("--pop-img", `url('${POPCORN_IMG_FILE}')`);
 
-        const startX = originX + (Math.random() * 60 - 30);
+        // origem espalhada numa faixa central, não um pontinho só
+        const startX = originX + (Math.random() * (w * 0.6) - w * 0.3);
+        const startY = originY + (Math.random() * (h * 0.24) - h * 0.12);
         el.style.left = startX + "px";
-        el.style.top = originY + "px";
+        el.style.top = startY + "px";
 
-        const size = 42 + Math.round(Math.random() * 52);
+        const size = 38 + Math.round(Math.random() * 50);
         el.style.width = size + "px";
         el.style.height = size + "px";
 
@@ -2132,12 +2229,14 @@
         const x0 = (Math.random() * 20) - 10;
         const y0 = (Math.random() * 20) - 10;
 
-        const burst = Math.min(w, h) * (0.16 + Math.random() * 0.24);
-        const x1 = dirX * burst;
-        const y1 = dirY * burst;
+        // alcance calculado por largura/altura separadas, pra cobrir a tela toda (não só o centro)
+        const burstX = w * (0.30 + Math.random() * 0.34);
+        const burstY = h * (0.26 + Math.random() * 0.32);
+        const x1 = dirX * burstX;
+        const y1 = dirY * burstY;
 
-        const gravity = h * (0.28 + Math.random() * 0.42);
-        const x2 = x1 + dirX * (30 + Math.random() * 60);
+        const gravity = h * (0.30 + Math.random() * 0.45);
+        const x2 = x1 + dirX * (40 + Math.random() * 70);
         const y2 = y1 + gravity;
 
         const r0 = (Math.random() * 30) - 15;
@@ -2161,14 +2260,14 @@
         el.style.setProperty("--s1", `${s1}`);
         el.style.setProperty("--s2", `${s2}`);
 
-        const dur = 1800 + Math.round(Math.random() * 1200);
+        const dur = 2200 + Math.round(Math.random() * 1400);
         const delay = Math.round(Math.random() * 260);
-        el.style.animation = `popExplode ${dur}ms cubic-bezier(.14,.88,.20,1) ${delay}ms forwards`;
+        el.style.animation = `popExplode ${dur}ms ease-out ${delay}ms forwards`;
 
         overlay.appendChild(el);
       }
 
-      setTimeout(() => { overlay.innerHTML = ""; }, 3600);
+      setTimeout(() => { overlay.innerHTML = ""; }, 4200);
     }
 
     const POPCORN_SEEN_KEY = "tge_popcorn_seen";
