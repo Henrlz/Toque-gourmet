@@ -595,6 +595,11 @@
     </div>
   </aside>
 
+  <div class="cookie-banner" id="cookieBanner">
+    <p>Usamos cookies e armazenamento local (por exemplo, para lembrar os itens do seu carrinho) para melhorar sua experiência no site. Ao continuar navegando, você concorda com isso.</p>
+    <button class="btn-primary" type="button" onclick="acceptCookies()">Entendi</button>
+  </div>
+
   <script>
     const WHATSAPP_PHONE = "5519953243215";
     const POPCORN_IMG_FILE = "pipoca.png";
@@ -682,6 +687,19 @@
     document.querySelectorAll("#mobileNav .nav-link").forEach((link) => {
       link.addEventListener("click", closeMobileNav);
     });
+
+    const COOKIE_CONSENT_KEY = "tge_cookie_consent_v1";
+    if(!localStorage.getItem(COOKIE_CONSENT_KEY)){
+      setTimeout(() => {
+        const el = document.getElementById("cookieBanner");
+        if(el) el.classList.add("show");
+      }, 500);
+    }
+    function acceptCookies(){
+      try{ localStorage.setItem(COOKIE_CONSENT_KEY, "1"); } catch(e){}
+      const el = document.getElementById("cookieBanner");
+      if(el) el.classList.remove("show");
+    }
 
     function cartCount(){
       return Object.values(cart).reduce((sum, item) => sum + item.qty, 0);

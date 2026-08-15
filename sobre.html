@@ -256,6 +256,11 @@
     </div>
   </footer>
 
+  <div class="cookie-banner" id="cookieBanner">
+    <p>Usamos cookies e armazenamento local (por exemplo, para lembrar os itens do seu carrinho) para melhorar sua experiência no site. Ao continuar navegando, você concorda com isso.</p>
+    <button class="btn-primary" type="button" onclick="acceptCookies()">Entendi</button>
+  </div>
+
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     try{
@@ -286,6 +291,19 @@
     document.querySelectorAll("#mobileNav .nav-link").forEach(function(link){
       link.addEventListener("click", closeMobileNav);
     });
+
+    var COOKIE_CONSENT_KEY = "tge_cookie_consent_v1";
+    if(!localStorage.getItem(COOKIE_CONSENT_KEY)){
+      setTimeout(function(){
+        var el = document.getElementById("cookieBanner");
+        if(el) el.classList.add("show");
+      }, 500);
+    }
+    function acceptCookies(){
+      try{ localStorage.setItem(COOKIE_CONSENT_KEY, "1"); } catch(e){}
+      var el = document.getElementById("cookieBanner");
+      if(el) el.classList.remove("show");
+    }
   </script>
 
 </body>
