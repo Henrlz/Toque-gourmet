@@ -174,9 +174,23 @@
         </a>
 
         <a class="nav-link" href="https://wa.me/5519953243215" target="_blank" rel="noopener noreferrer">Contato</a>
+
+        <button class="nav-toggle" type="button" id="navToggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMobileNav()">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a class="nav-link" href="/#home">Home</a>
+    <a class="nav-link" href="/#sabores">Sabores</a>
+    <a class="nav-link" href="/#baldes">Baldes</a>
+    <a class="nav-link" href="/#eventos">Eventos</a>
+    <a class="nav-link" href="/sobre.html">Sobre</a>
+  </nav>
+
+  <div class="nav-overlay" id="navOverlay" onclick="closeMobileNav()"></div>
 
   <section class="about-hero">
     <div class="about-wrap">
@@ -251,6 +265,27 @@
       var badge = document.getElementById("cartBadge");
       if(badge) badge.textContent = count;
     } catch(e){}
+
+    function toggleMobileNav(){
+      var nav = document.getElementById("mobileNav");
+      var toggle = document.getElementById("navToggle");
+      var overlay = document.getElementById("navOverlay");
+      var isOpen = nav.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      overlay.classList.toggle("is-open", isOpen);
+    }
+
+    function closeMobileNav(){
+      document.getElementById("mobileNav").classList.remove("is-open");
+      document.getElementById("navToggle").classList.remove("is-open");
+      document.getElementById("navToggle").setAttribute("aria-expanded", "false");
+      document.getElementById("navOverlay").classList.remove("is-open");
+    }
+
+    document.querySelectorAll("#mobileNav .nav-link").forEach(function(link){
+      link.addEventListener("click", closeMobileNav);
+    });
   </script>
 
 </body>
