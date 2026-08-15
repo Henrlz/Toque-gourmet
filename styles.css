@@ -1106,6 +1106,7 @@ footer{
   .brand-text .sub{ display:none; }
   .hero-panel{ padding: 14px 14px; }
   .hero-image{ height: 235px; }
+  .slide[data-slide="1"] .hero-bg img{ object-position: left center; }
 }
 @media (max-width: 520px){
   .tray-grid{ grid-template-columns: 1fr; }
