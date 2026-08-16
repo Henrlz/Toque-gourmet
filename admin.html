@@ -164,24 +164,27 @@
           <input id="fieldDesc" type="text" placeholder="Ex: Crocante e doce, com canela.">
         </div>
 
-        <div class="admin-field">
-          <label for="fieldPhoto">Foto do sabor</label>
-          <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
-          <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
-          <img id="photoPreview" style="display:none; max-width:120px; margin-top:8px; border:1px solid rgba(0,0,0,.10); border-radius:8px;">
+        <div class="admin-row">
+          <div class="admin-field">
+            <label for="fieldImg">Link da foto (obrigatório)</label>
+            <input id="fieldImg" type="text" placeholder="https://...">
+          </div>
+          <div class="admin-field">
+            <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
+            <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
+          </div>
         </div>
+        <p style="font-size:11px; color:rgba(0,0,0,.55); margin:-6px 0 12px;">
+          Não tem um link? Suba a foto em <a href="https://postimages.org/" target="_blank" rel="noopener">postimages.org</a>
+          ou <a href="https://imgbb.com/" target="_blank" rel="noopener">imgbb.com</a> (grátis, sem precisar criar conta) e cole o link gerado aqui.
+        </p>
+        <img id="photoPreview" style="display:none; max-width:120px; margin:-4px 0 12px; border:1px solid rgba(0,0,0,.10); border-radius:8px;">
 
         <details style="margin-bottom:12px;">
-          <summary style="font-size:11px; color:rgba(0,0,0,.55); cursor:pointer;">Opção avançada: usar um link de foto em vez de enviar um arquivo</summary>
-          <div class="admin-row" style="margin-top:10px;">
-            <div class="admin-field">
-              <label for="fieldImg">Link da foto</label>
-              <input id="fieldImg" type="text" placeholder="https://... ou nome-do-arquivo.png">
-            </div>
-            <div class="admin-field">
-              <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
-              <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
-            </div>
+          <summary style="font-size:11px; color:rgba(0,0,0,.55); cursor:pointer;">Opção avançada: enviar o arquivo direto (requer plano pago do Firebase Storage)</summary>
+          <div class="admin-field" style="margin-top:10px;">
+            <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
+            <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
           </div>
         </details>
 
