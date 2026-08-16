@@ -164,16 +164,26 @@
           <input id="fieldDesc" type="text" placeholder="Ex: Crocante e doce, com canela.">
         </div>
 
-        <div class="admin-row">
-          <div class="admin-field">
-            <label for="fieldImg">Link da foto (obrigatório)</label>
-            <input id="fieldImg" type="text" placeholder="https://... ou nome-do-arquivo.png">
-          </div>
-          <div class="admin-field">
-            <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
-            <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
-          </div>
+        <div class="admin-field">
+          <label for="fieldPhoto">Foto do sabor</label>
+          <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
+          <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
+          <img id="photoPreview" style="display:none; max-width:120px; margin-top:8px; border:1px solid rgba(0,0,0,.10); border-radius:8px;">
         </div>
+
+        <details style="margin-bottom:12px;">
+          <summary style="font-size:11px; color:rgba(0,0,0,.55); cursor:pointer;">Opção avançada: usar um link de foto em vez de enviar um arquivo</summary>
+          <div class="admin-row" style="margin-top:10px;">
+            <div class="admin-field">
+              <label for="fieldImg">Link da foto</label>
+              <input id="fieldImg" type="text" placeholder="https://... ou nome-do-arquivo.png">
+            </div>
+            <div class="admin-field">
+              <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
+              <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
+            </div>
+          </div>
+        </details>
 
         <div class="bucket-actions">
           <button class="btn-secondary" type="button" onclick="resetForm()">Limpar</button>
@@ -193,6 +203,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
     // Mesmo config do index.html (Configurações do projeto > Seus apps, no Firebase Console).
     const FIREBASE_CONFIG = {
@@ -273,6 +284,74 @@
       });
     }
 
+    function supportsWebpEncoding(){
+      const canvas = document.createElement("canvas");
+      canvas.width = 1;
+      canvas.height = 1;
+      return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0;
+    }
+
+    function fileToWebpBlob(file, quality){
+      return new Promise((resolve) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = () => {
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            canvas.getContext("2d").drawImage(img, 0, 0);
+            canvas.toBlob((blob) => resolve(blob || null), "image/webp", quality);
+          };
+          img.onerror = () => resolve(null);
+          img.src = reader.result;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handlePhotoPick(event){
+      const file = event.target.files[0];
+      if(!file) return;
+
+      const statusEl = document.getElementById("photoStatus");
+      const previewEl = document.getElementById("photoPreview");
+      statusEl.textContent = "Enviando foto...";
+
+      try{
+        const editId = document.getElementById("editId").value;
+        const nameSlug = slugify(document.getElementById("fieldName").value || "");
+        const baseId = editId || nameSlug || ("sabor_" + Date.now());
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        const storage = firebase.storage();
+
+        const originalRef = storage.ref("products/" + baseId + "_" + Date.now() + "." + ext);
+        await originalRef.put(file);
+        const originalUrl = await originalRef.getDownloadURL();
+        document.getElementById("fieldImg").value = originalUrl;
+        previewEl.src = originalUrl;
+        previewEl.style.display = "block";
+
+        if(supportsWebpEncoding()){
+          const webpBlob = await fileToWebpBlob(file, 0.85);
+          if(webpBlob){
+            const webpRef = storage.ref("products/" + baseId + "_" + Date.now() + ".webp");
+            await webpRef.put(webpBlob);
+            const webpUrl = await webpRef.getDownloadURL();
+            document.getElementById("fieldImgWebp").value = webpUrl;
+            statusEl.textContent = "Foto enviada (versão .webp gerada automaticamente).";
+            return;
+          }
+        }
+
+        document.getElementById("fieldImgWebp").value = "";
+        statusEl.textContent = "Foto enviada (não foi possível gerar a versão .webp neste navegador, mas a foto normal funciona sem problema).";
+      } catch(err){
+        statusEl.textContent = "Erro ao enviar foto: " + err.message;
+      }
+    }
+
     function slugify(name){
       return name
         .toLowerCase()
@@ -290,6 +369,9 @@
       document.getElementById("fieldDesc").value = "";
       document.getElementById("fieldImg").value = "";
       document.getElementById("fieldImgWebp").value = "";
+      document.getElementById("fieldPhoto").value = "";
+      document.getElementById("photoStatus").textContent = "";
+      document.getElementById("photoPreview").style.display = "none";
       hideMsg("formMsg");
     }
 
@@ -306,6 +388,14 @@
       document.getElementById("fieldDesc").value = p.desc || "";
       document.getElementById("fieldImg").value = p.img || "";
       document.getElementById("fieldImgWebp").value = p.imgWebp || "";
+      document.getElementById("photoStatus").textContent = "Foto atual abaixo. Escolha um novo arquivo só se quiser trocar.";
+      const preview = document.getElementById("photoPreview");
+      if(p.img){
+        preview.src = p.img;
+        preview.style.display = "block";
+      } else {
+        preview.style.display = "none";
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
