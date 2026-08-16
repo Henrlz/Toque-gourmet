@@ -228,92 +228,7 @@
 
         <div class="tray-body">
           <div class="tray-inner">
-            <div class="tray-grid">
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Mousse de Maracujá.webp">
-                    <img src="Mousse de Maracujá.png" alt="Mousse de Maracujá" loading="lazy">
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Mousse de Maracujá</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Delicado, cremoso e cítrico.</p>
-                  <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('mousse_maracuja')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Mousse de limão.webp">
-                    <img src="Mousse de limão.png" alt="Mousse de Limão" loading="lazy">
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Mousse de Limão</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Leve, refrescante e marcante.</p>
-                  <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('mousse_limao')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Ninho.webp">
-                    <img src="Ninho.png" alt="Ninho" loading="lazy">
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Ninho</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Clássico cremoso e irresistível.</p>
-                  <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('ninho')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Pé de molque.webp">
-                    <img
-                      src="Pé de molque.png"
-                      alt="Morango"
-                      loading="lazy"
-                      onerror="this.onerror=null; this.src='Pé de moleque.png';"
-                    >
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Morango</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Doce, cremoso e com aquele toque frutado.</p>
-                  <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('morango')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Morango.webp">
-                    <img src="Morango.png" alt="Pé de Moleque" loading="lazy">
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Pé de Moleque</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Crocante, caramelizado e cheio de amendoim.</p>
-                  <div class="price">Valor: R$ 17,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('pe_moleque')">Adicionar</button>
-                </div>
-              </article>
-            </div>
+            <div class="tray-grid" id="grid-Tradicional"></div>
           </div>
         </div>
       </div>
@@ -334,67 +249,7 @@
 
         <div class="tray-body">
           <div class="tray-inner">
-            <div class="tray-grid">
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="Ovomaltine.webp">
-                    <img src="Ovomaltine.png" alt="Ovomaltine" loading="lazy">
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Ovomaltine</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>Crocância extra e sabor marcante.</p>
-                  <div class="price">Valor: R$ 20,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('ovomaltine')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="img">
-                  <picture>
-                    <source type="image/webp" srcset="ninho co nutella.webp">
-                    <img
-                      src="ninho co nutella.png"
-                      alt="Ninho com Nutella"
-                      loading="lazy"
-                      onerror="this.onerror=null;
-                               if(!this.dataset.try2){ this.dataset.try2='1'; this.src='ninho com nutella.png'; return; }
-                               if(!this.dataset.try3){ this.dataset.try3='1'; this.src='Ninho com nutella.png'; return; }
-                               this.src='Ninho com Nutella.png';"
-                    >
-                  </picture>
-                </div>
-                <div class="body">
-                  <h3>Ninho com Nutella</h3>
-                  <div class="meta-pill">Saquinho 100g</div>
-                  <p>sucesso de vendas, super cremoso.</p>
-                  <div class="price">Valor: R$ 20,00</div>
-                  <button class="btn-cart" type="button" onclick="addToCart('ninho_nutella')">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card" aria-hidden="true" style="opacity:.55;">
-                <div class="img"></div>
-                <div class="body">
-                  <h3>(Em breve)</h3>
-                  <p>Espaço reservado para novo sabor.</p>
-                  <div class="price">Valor: —</div>
-                  <button class="btn-cart" type="button" disabled style="opacity:.55; cursor:not-allowed;">Adicionar</button>
-                </div>
-              </article>
-
-              <article class="card" aria-hidden="true" style="opacity:.55;">
-                <div class="img"></div>
-                <div class="body">
-                  <h3>(Em breve)</h3>
-                  <p>Espaço reservado para novo sabor.</p>
-                  <div class="price">Valor: —</div>
-                  <button class="btn-cart" type="button" disabled style="opacity:.55; cursor:not-allowed;">Adicionar</button>
-                </div>
-              </article>
-            </div>
+            <div class="tray-grid" id="grid-VIP"></div>
           </div>
         </div>
       </div>
@@ -600,6 +455,8 @@
     <button class="btn-primary" type="button" onclick="acceptCookies()">Entendi</button>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
     const WHATSAPP_PHONE = "5519953243215";
     const POPCORN_IMG_FILE = "pipoca.png";
@@ -608,19 +465,104 @@
     const PRICE_VIP  = 20.00; // saquinho 100g
     const BUCKET_PRICES = { P: 25.00, M: 35.00, G: 45.00 };
 
-    const catalog = {
-      mousse_maracuja: { id:"mousse_maracuja", name:"Mousse de Maracujá", category:"Tradicional", grams:100, price: PRICE_TRAD },
-      mousse_limao:    { id:"mousse_limao",    name:"Mousse de Limão",    category:"Tradicional", grams:100, price: PRICE_TRAD },
-      ninho:           { id:"ninho",           name:"Ninho",              category:"Tradicional", grams:100, price: PRICE_TRAD },
-      morango:         { id:"morango",         name:"Morango",            category:"Tradicional", grams:100, price: PRICE_TRAD },
-      pe_moleque:      { id:"pe_moleque",      name:"Pé de Moleque",      category:"Tradicional", grams:100, price: PRICE_TRAD },
-
-      ovomaltine:      { id:"ovomaltine",      name:"Ovomaltine",         category:"VIP", grams:100, price: PRICE_VIP },
-      ninho_nutella:   { id:"ninho_nutella",   name:"Ninho com Nutella",  category:"VIP", grams:100, price: PRICE_VIP },
+    // Preencha com o config do seu projeto Firebase (Configurações do projeto > Seus apps).
+    // Esses valores são públicos por natureza (uso no cliente), não são segredos.
+    const FIREBASE_CONFIG = {
+      apiKey: "COLOQUE_AQUI",
+      authDomain: "COLOQUE_AQUI",
+      projectId: "COLOQUE_AQUI",
+      storageBucket: "COLOQUE_AQUI",
+      messagingSenderId: "COLOQUE_AQUI",
+      appId: "COLOQUE_AQUI"
     };
 
     const CART_STORAGE_KEY = "tge_cart_v1";
     const cart = {};
+    let catalog = {};
+
+    // Catálogo padrão: usado se o Firestore ainda não tiver produtos cadastrados
+    // ou não estiver configurado. Assim que o admin.html cadastrar sabores, eles
+    // substituem esta lista automaticamente.
+    const FALLBACK_PRODUCTS = [
+      { id:"mousse_maracuja", name:"Mousse de Maracujá", category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Delicado, cremoso e cítrico.", img:"Mousse de Maracujá.png", imgWebp:"Mousse de Maracujá.webp" },
+      { id:"mousse_limao",    name:"Mousse de Limão",    category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Leve, refrescante e marcante.", img:"Mousse de limão.png", imgWebp:"Mousse de limão.webp" },
+      { id:"ninho",           name:"Ninho",               category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Clássico cremoso e irresistível.", img:"Ninho.png", imgWebp:"Ninho.webp" },
+      { id:"morango",         name:"Morango",             category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Doce, cremoso e com aquele toque frutado.", img:"Pé de molque.png", imgWebp:"Pé de molque.webp" },
+      { id:"pe_moleque",      name:"Pé de Moleque",       category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Crocante, caramelizado e cheio de amendoim.", img:"Morango.png", imgWebp:"Morango.webp" },
+      { id:"ovomaltine",      name:"Ovomaltine",          category:"VIP", grams:100, price:PRICE_VIP, desc:"Crocância extra e sabor marcante.", img:"Ovomaltine.png", imgWebp:"Ovomaltine.webp" },
+      { id:"ninho_nutella",   name:"Ninho com Nutella",   category:"VIP", grams:100, price:PRICE_VIP, desc:"Sucesso de vendas, super cremoso.", img:"ninho co nutella.png", imgWebp:"ninho co nutella.webp" },
+    ];
+
+    function productCardHTML(p){
+      const priceLabel = formatBRL(Number(p.price) || 0);
+      const imgSrc = p.img || "";
+      const pictureHTML = p.imgWebp
+        ? `<picture><source type="image/webp" srcset="${p.imgWebp}"><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`
+        : `<picture><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`;
+      return `
+        <article class="card">
+          <div class="img">${pictureHTML}</div>
+          <div class="body">
+            <h3>${p.name}</h3>
+            <div class="meta-pill">Saquinho ${p.grams || 100}g</div>
+            <p>${p.desc || ""}</p>
+            <div class="price">Valor: ${priceLabel}</div>
+            <button class="btn-cart" type="button" onclick="addToCart('${p.id}')">Adicionar</button>
+          </div>
+        </article>`;
+    }
+
+    function pruneCartAgainstCatalog(){
+      let changed = false;
+      Object.keys(cart).forEach((key) => {
+        const item = cart[key];
+        if(item.type === "product" && !catalog[item.productId]){
+          delete cart[key];
+          changed = true;
+        }
+      });
+      if(changed) saveCart();
+    }
+
+    function renderProducts(products){
+      catalog = {};
+      const byCategory = { Tradicional: [], VIP: [] };
+
+      products.forEach((p) => {
+        catalog[p.id] = p;
+        if(byCategory[p.category]) byCategory[p.category].push(p);
+      });
+
+      const emptyMsg = '<p style="padding:12px 4px; font-size:12px; color:rgba(0,0,0,.55);">Nenhum sabor cadastrado nessa categoria ainda.</p>';
+      const gridTrad = document.getElementById("grid-Tradicional");
+      const gridVip = document.getElementById("grid-VIP");
+      if(gridTrad) gridTrad.innerHTML = byCategory.Tradicional.map(productCardHTML).join("") || emptyMsg;
+      if(gridVip) gridVip.innerHTML = byCategory.VIP.map(productCardHTML).join("") || emptyMsg;
+
+      pruneCartAgainstCatalog();
+      updateCartUI();
+    }
+
+    renderProducts(FALLBACK_PRODUCTS);
+
+    function loadProductsFromFirestore(){
+      if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.indexOf("COLOQUE_AQUI") === 0) return;
+      try{
+        if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+        firebase.firestore().collection("products").get().then((snap) => {
+          if(snap.empty) return;
+          const products = [];
+          snap.forEach((doc) => products.push({ id: doc.id, ...doc.data() }));
+          renderProducts(products);
+        }).catch((err) => {
+          console.warn("Não foi possível carregar produtos do Firestore, usando catálogo padrão.", err);
+        });
+      } catch(e){
+        console.warn("Firebase não configurado, usando catálogo padrão.", e);
+      }
+    }
+
+    loadProductsFromFirestore();
 
     (function loadCart(){
       try{

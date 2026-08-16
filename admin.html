@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Toque Gourmet Especial</title>
+
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body{ padding: 32px 16px 64px; }
+    .admin-wrap{
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .admin-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .admin-header h1{
+      font-family:"Playfair Display", serif;
+      font-size: 20px;
+      color: var(--gold-dark);
+    }
+    .admin-panel{
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 24px rgba(0,0,0,.08);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .admin-panel h2{
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.75);
+      margin-bottom: 14px;
+    }
+    .admin-field{ margin-bottom: 12px; }
+    .admin-field label{
+      display:block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.60);
+      margin-bottom: 6px;
+    }
+    .admin-field input, .admin-field select, .admin-field textarea{
+      width: 100%;
+      height: 38px;
+      border: 1px solid rgba(0,0,0,.15);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #fff;
+    }
+    .admin-field textarea{ height: auto; padding: 10px 12px; }
+    .admin-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .admin-msg{
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      display:none;
+    }
+    .admin-msg.show{ display:block; }
+    .admin-msg.ok{ background: rgba(60,140,60,.12); color:#1f5c1f; }
+    .admin-msg.error{ background: rgba(180,40,40,.12); color:#7a0e0e; }
+
+    .product-row{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .product-row:last-child{ border-bottom:0; }
+    .product-row .thumb{
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      background:#fff;
+      border: 1px solid rgba(0,0,0,.10);
+      overflow:hidden;
+      flex: 0 0 auto;
+      display:grid; place-items:center;
+    }
+    .product-row .thumb img{ width:100%; height:100%; object-fit:contain; }
+    .product-row .info{ flex: 1 1 auto; min-width:0; }
+    .product-row .info strong{ font-size: 13px; }
+    .product-row .info span{ font-size: 11px; color: rgba(0,0,0,.55); display:block; }
+    .product-row .actions{ display:flex; gap: 8px; flex: 0 0 auto; }
+
+    #loginPanel{ max-width: 380px; margin: 60px auto; }
+    #appPanel{ display:none; }
+  </style>
+</head>
+
+<body class="paper-bg">
+  <div class="admin-wrap">
+
+    <div class="admin-header">
+      <h1>Toque Gourmet Especial — Admin</h1>
+      <button class="btn-secondary" type="button" id="logoutBtn" style="display:none;" onclick="doLogout()">Sair</button>
+    </div>
+
+    <div class="admin-panel" id="loginPanel">
+      <h2>Entrar</h2>
+      <div id="loginMsg" class="admin-msg error"></div>
+      <div class="admin-field">
+        <label for="loginEmail">E-mail</label>
+        <input id="loginEmail" type="email" autocomplete="username">
+      </div>
+      <div class="admin-field">
+        <label for="loginPassword">Senha</label>
+        <input id="loginPassword" type="password" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" type="button" onclick="doLogin()">Entrar</button>
+    </div>
+
+    <div id="appPanel">
+      <div class="admin-panel">
+        <h2>Adicionar / editar sabor</h2>
+        <div id="formMsg" class="admin-msg"></div>
+
+        <input type="hidden" id="editId">
+
+        <div class="admin-row">
+          <div class="admin-field">
+            <label for="fieldName">Nome do sabor</label>
+            <input id="fieldName" type="text" placeholder="Ex: Churros">
+          </div>
+          <div class="admin-field">
+            <label for="fieldCategory">Categoria</label>
+            <select id="fieldCategory">
+              <option value="Tradicional">Tradicional (R$ 17,00)</option>
+              <option value="VIP">VIP (R$ 20,00)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-field">
+            <label for="fieldPrice">Preço (R$)</label>
+            <input id="fieldPrice" type="number" step="0.01" placeholder="17.00">
+          </div>
+          <div class="admin-field">
+            <label for="fieldGrams">Gramas do saquinho</label>
+            <input id="fieldGrams" type="number" value="100">
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="fieldDesc">Descrição curta</label>
+          <input id="fieldDesc" type="text" placeholder="Ex: Crocante e doce, com canela.">
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-field">
+            <label for="fieldImg">Link da foto (obrigatório)</label>
+            <input id="fieldImg" type="text" placeholder="https://... ou nome-do-arquivo.png">
+          </div>
+          <div class="admin-field">
+            <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
+            <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
+          </div>
+        </div>
+
+        <div class="bucket-actions">
+          <button class="btn-secondary" type="button" onclick="resetForm()">Limpar</button>
+          <button class="btn-cart" type="button" onclick="saveProduct()">Salvar sabor</button>
+        </div>
+      </div>
+
+      <div class="admin-panel">
+        <h2>Sabores cadastrados</h2>
+        <div id="seedBox"></div>
+        <div id="productList"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Mesmo config do index.html (Configurações do projeto > Seus apps, no Firebase Console).
+    const FIREBASE_CONFIG = {
+      apiKey: "COLOQUE_AQUI",
+      authDomain: "COLOQUE_AQUI",
+      projectId: "COLOQUE_AQUI",
+      storageBucket: "COLOQUE_AQUI",
+      messagingSenderId: "COLOQUE_AQUI",
+      appId: "COLOQUE_AQUI"
+    };
+
+    const PRICE_TRAD = 17.00;
+    const PRICE_VIP  = 20.00;
+
+    const FALLBACK_PRODUCTS = [
+      { id:"mousse_maracuja", name:"Mousse de Maracujá", category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Delicado, cremoso e cítrico.", img:"Mousse de Maracujá.png", imgWebp:"Mousse de Maracujá.webp" },
+      { id:"mousse_limao",    name:"Mousse de Limão",    category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Leve, refrescante e marcante.", img:"Mousse de limão.png", imgWebp:"Mousse de limão.webp" },
+      { id:"ninho",           name:"Ninho",               category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Clássico cremoso e irresistível.", img:"Ninho.png", imgWebp:"Ninho.webp" },
+      { id:"morango",         name:"Morango",             category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Doce, cremoso e com aquele toque frutado.", img:"Pé de molque.png", imgWebp:"Pé de molque.webp" },
+      { id:"pe_moleque",      name:"Pé de Moleque",       category:"Tradicional", grams:100, price:PRICE_TRAD, desc:"Crocante, caramelizado e cheio de amendoim.", img:"Morango.png", imgWebp:"Morango.webp" },
+      { id:"ovomaltine",      name:"Ovomaltine",          category:"VIP", grams:100, price:PRICE_VIP, desc:"Crocância extra e sabor marcante.", img:"Ovomaltine.png", imgWebp:"Ovomaltine.webp" },
+      { id:"ninho_nutella",   name:"Ninho com Nutella",   category:"VIP", grams:100, price:PRICE_VIP, desc:"Sucesso de vendas, super cremoso.", img:"ninho co nutella.png", imgWebp:"ninho co nutella.webp" },
+    ];
+
+    const firebaseReady = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.apiKey.indexOf("COLOQUE_AQUI") !== 0);
+    if(!firebaseReady){
+      document.getElementById("loginMsg").textContent = "O Firebase ainda não foi configurado neste arquivo (FIREBASE_CONFIG). Peça para quem cuida do site preencher isso primeiro.";
+      document.getElementById("loginMsg").classList.add("show");
+    } else {
+      firebase.initializeApp(FIREBASE_CONFIG);
+    }
+
+    function showMsg(elId, text, type){
+      const el = document.getElementById(elId);
+      el.textContent = text;
+      el.className = "admin-msg show " + (type || "error");
+    }
+    function hideMsg(elId){
+      document.getElementById(elId).classList.remove("show");
+    }
+
+    function doLogin(){
+      if(!firebaseReady){
+        showMsg("loginMsg", "O Firebase ainda não foi configurado neste arquivo.", "error");
+        return;
+      }
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      if(!email || !password){
+        showMsg("loginMsg", "Preencha e-mail e senha.", "error");
+        return;
+      }
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .catch((err) => {
+          showMsg("loginMsg", "Não foi possível entrar: e-mail ou senha incorretos.", "error");
+        });
+    }
+
+    function doLogout(){
+      firebase.auth().signOut();
+    }
+
+    if(firebaseReady){
+      firebase.auth().onAuthStateChanged((user) => {
+        const loginPanel = document.getElementById("loginPanel");
+        const appPanel = document.getElementById("appPanel");
+        const logoutBtn = document.getElementById("logoutBtn");
+        if(user){
+          loginPanel.style.display = "none";
+          appPanel.style.display = "block";
+          logoutBtn.style.display = "inline-block";
+          loadProductList();
+        } else {
+          loginPanel.style.display = "block";
+          appPanel.style.display = "none";
+          logoutBtn.style.display = "none";
+        }
+      });
+    }
+
+    function slugify(name){
+      return name
+        .toLowerCase()
+        .normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+    }
+
+    function resetForm(){
+      document.getElementById("editId").value = "";
+      document.getElementById("fieldName").value = "";
+      document.getElementById("fieldCategory").value = "Tradicional";
+      document.getElementById("fieldPrice").value = "";
+      document.getElementById("fieldGrams").value = "100";
+      document.getElementById("fieldDesc").value = "";
+      document.getElementById("fieldImg").value = "";
+      document.getElementById("fieldImgWebp").value = "";
+      hideMsg("formMsg");
+    }
+
+    let loadedProducts = {};
+
+    function editProduct(id){
+      const p = loadedProducts[id];
+      if(!p) return;
+      document.getElementById("editId").value = p.id;
+      document.getElementById("fieldName").value = p.name || "";
+      document.getElementById("fieldCategory").value = p.category || "Tradicional";
+      document.getElementById("fieldPrice").value = p.price || "";
+      document.getElementById("fieldGrams").value = p.grams || 100;
+      document.getElementById("fieldDesc").value = p.desc || "";
+      document.getElementById("fieldImg").value = p.img || "";
+      document.getElementById("fieldImgWebp").value = p.imgWebp || "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function saveProduct(){
+      const name = document.getElementById("fieldName").value.trim();
+      const category = document.getElementById("fieldCategory").value;
+      const price = parseFloat(document.getElementById("fieldPrice").value);
+      const grams = parseInt(document.getElementById("fieldGrams").value, 10) || 100;
+      const desc = document.getElementById("fieldDesc").value.trim();
+      const img = document.getElementById("fieldImg").value.trim();
+      const imgWebp = document.getElementById("fieldImgWebp").value.trim();
+      const editId = document.getElementById("editId").value;
+
+      if(!name || !isFinite(price) || price <= 0 || !img){
+        showMsg("formMsg", "Preencha nome, preço e o link da foto.", "error");
+        return;
+      }
+
+      const id = editId || slugify(name);
+      const data = { name, category, price, grams, desc, img };
+      if(imgWebp) data.imgWebp = imgWebp;
+
+      firebase.firestore().collection("products").doc(id).set(data)
+        .then(() => {
+          showMsg("formMsg", editId ? "Sabor atualizado." : "Sabor adicionado.", "ok");
+          resetForm();
+          loadProductList();
+        })
+        .catch((err) => {
+          showMsg("formMsg", "Erro ao salvar: " + err.message, "error");
+        });
+    }
+
+    function deleteProduct(id){
+      const p = loadedProducts[id];
+      const name = p ? p.name : id;
+      if(!confirm('Remover "' + name + '" do site?')) return;
+      firebase.firestore().collection("products").doc(id).delete()
+        .then(() => loadProductList())
+        .catch((err) => alert("Erro ao remover: " + err.message));
+    }
+
+    function seedCatalog(){
+      const batch = firebase.firestore().batch();
+      FALLBACK_PRODUCTS.forEach((p) => {
+        const ref = firebase.firestore().collection("products").doc(p.id);
+        batch.set(ref, {
+          name: p.name, category: p.category, price: p.price,
+          grams: p.grams, desc: p.desc, img: p.img, imgWebp: p.imgWebp
+        });
+      });
+      batch.commit().then(() => loadProductList());
+    }
+
+    function productRowHTML(p){
+      return `
+        <div class="product-row">
+          <div class="thumb"><img src="${p.img || ''}" alt=""></div>
+          <div class="info">
+            <strong>${p.name}</strong>
+            <span>${p.category} • R$ ${Number(p.price || 0).toFixed(2).replace(".", ",")}</span>
+          </div>
+          <div class="actions">
+            <button class="btn-secondary" type="button" onclick="editProduct('${p.id}')">Editar</button>
+            <button class="btn-secondary" type="button" onclick="deleteProduct('${p.id}')">Remover</button>
+          </div>
+        </div>`;
+    }
+
+    function loadProductList(){
+      firebase.firestore().collection("products").get().then((snap) => {
+        const listEl = document.getElementById("productList");
+        const seedBox = document.getElementById("seedBox");
+
+        if(snap.empty){
+          seedBox.innerHTML = '<p style="font-size:12px; color:rgba(0,0,0,.6); margin-bottom:12px;">Nenhum sabor cadastrado ainda. Você pode importar o catálogo que já está no site como ponto de partida.</p><button class="btn-secondary" type="button" onclick="seedCatalog()">Importar catálogo atual</button>';
+          listEl.innerHTML = "";
+          loadedProducts = {};
+          return;
+        }
+
+        seedBox.innerHTML = "";
+        const products = [];
+        loadedProducts = {};
+        snap.forEach((doc) => {
+          const p = { id: doc.id, ...doc.data() };
+          products.push(p);
+          loadedProducts[p.id] = p;
+        });
+        listEl.innerHTML = products.map(productRowHTML).join("");
+      });
+    }
+  </script>
+</body>
+</html>
