@@ -102,6 +102,18 @@
 
     #loginPanel{ max-width: 380px; margin: 60px auto; }
     #appPanel{ display:none; }
+
+    @media (max-width: 640px){
+      body{ padding: 20px 12px 48px; }
+      .admin-header h1{ font-size: 15px; }
+      .admin-panel{ padding: 16px; }
+      .admin-row{ grid-template-columns: 1fr; }
+      #loginPanel{ margin: 32px auto; }
+
+      .product-row{ flex-wrap: wrap; }
+      .product-row .actions{ width: 100%; margin-top: 10px; }
+      .product-row .actions button{ flex: 1 1 0; }
+    }
   </style>
 </head>
 
@@ -164,27 +176,24 @@
           <input id="fieldDesc" type="text" placeholder="Ex: Crocante e doce, com canela.">
         </div>
 
-        <div class="admin-row">
-          <div class="admin-field">
-            <label for="fieldImg">Link da foto (obrigatório)</label>
-            <input id="fieldImg" type="text" placeholder="https://...">
-          </div>
-          <div class="admin-field">
-            <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
-            <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
-          </div>
+        <div class="admin-field">
+          <label for="fieldPhoto">Foto do sabor</label>
+          <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
+          <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
+          <img id="photoPreview" style="display:none; max-width:120px; margin-top:8px; border:1px solid rgba(0,0,0,.10); border-radius:8px;">
         </div>
-        <p style="font-size:11px; color:rgba(0,0,0,.55); margin:-6px 0 12px;">
-          Não tem um link? Suba a foto em <a href="https://postimages.org/" target="_blank" rel="noopener">postimages.org</a>
-          ou <a href="https://imgbb.com/" target="_blank" rel="noopener">imgbb.com</a> (grátis, sem precisar criar conta) e cole o link gerado aqui.
-        </p>
-        <img id="photoPreview" style="display:none; max-width:120px; margin:-4px 0 12px; border:1px solid rgba(0,0,0,.10); border-radius:8px;">
 
         <details style="margin-bottom:12px;">
-          <summary style="font-size:11px; color:rgba(0,0,0,.55); cursor:pointer;">Opção avançada: enviar o arquivo direto (requer plano pago do Firebase Storage)</summary>
-          <div class="admin-field" style="margin-top:10px;">
-            <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
-            <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
+          <summary style="font-size:11px; color:rgba(0,0,0,.55); cursor:pointer;">Opção avançada: usar um link de foto em vez de enviar um arquivo</summary>
+          <div class="admin-row" style="margin-top:10px;">
+            <div class="admin-field">
+              <label for="fieldImg">Link da foto</label>
+              <input id="fieldImg" type="text" placeholder="https://...">
+            </div>
+            <div class="admin-field">
+              <label for="fieldImgWebp">Link da foto em .webp (opcional)</label>
+              <input id="fieldImgWebp" type="text" placeholder="opcional, deixe em branco se não tiver">
+            </div>
           </div>
         </details>
 
@@ -206,7 +215,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
     // Mesmo config do index.html (Configurações do projeto > Seus apps, no Firebase Console).
     const FIREBASE_CONFIG = {
@@ -216,6 +224,13 @@
       storageBucket: "toquegourmetespecial.firebasestorage.app",
       messagingSenderId: "374853775326",
       appId: "1:374853775326:web:7f1cabb4fabd5fb2d9b74f"
+    };
+
+    // Preencha depois de criar uma conta gratuita em cloudinary.com e um
+    // "upload preset" com Signing Mode = Unsigned (Settings > Upload).
+    const CLOUDINARY_CONFIG = {
+      cloudName: "COLOQUE_AQUI",
+      uploadPreset: "COLOQUE_AQUI"
     };
 
     const PRICE_TRAD = 17.00;
@@ -287,31 +302,9 @@
       });
     }
 
-    function supportsWebpEncoding(){
-      const canvas = document.createElement("canvas");
-      canvas.width = 1;
-      canvas.height = 1;
-      return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0;
-    }
-
-    function fileToWebpBlob(file, quality){
-      return new Promise((resolve) => {
-        const img = new Image();
-        const reader = new FileReader();
-        reader.onload = () => {
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            canvas.getContext("2d").drawImage(img, 0, 0);
-            canvas.toBlob((blob) => resolve(blob || null), "image/webp", quality);
-          };
-          img.onerror = () => resolve(null);
-          img.src = reader.result;
-        };
-        reader.onerror = () => resolve(null);
-        reader.readAsDataURL(file);
-      });
+    function cloudinaryReady(){
+      return !!(CLOUDINARY_CONFIG.cloudName && CLOUDINARY_CONFIG.cloudName.indexOf("COLOQUE_AQUI") !== 0
+        && CLOUDINARY_CONFIG.uploadPreset && CLOUDINARY_CONFIG.uploadPreset.indexOf("COLOQUE_AQUI") !== 0);
     }
 
     async function handlePhotoPick(event){
@@ -320,36 +313,36 @@
 
       const statusEl = document.getElementById("photoStatus");
       const previewEl = document.getElementById("photoPreview");
+
+      if(!cloudinaryReady()){
+        statusEl.textContent = "O Cloudinary ainda não foi configurado neste arquivo. Use a opção de link de foto abaixo por enquanto.";
+        return;
+      }
+
       statusEl.textContent = "Enviando foto...";
 
       try{
-        const editId = document.getElementById("editId").value;
-        const nameSlug = slugify(document.getElementById("fieldName").value || "");
-        const baseId = editId || nameSlug || ("sabor_" + Date.now());
-        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-        const storage = firebase.storage();
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
+        formData.append("folder", "products");
 
-        const originalRef = storage.ref("products/" + baseId + "_" + Date.now() + "." + ext);
-        await originalRef.put(file);
-        const originalUrl = await originalRef.getDownloadURL();
-        document.getElementById("fieldImg").value = originalUrl;
-        previewEl.src = originalUrl;
-        previewEl.style.display = "block";
+        const uploadUrl = "https://api.cloudinary.com/v1_1/" + CLOUDINARY_CONFIG.cloudName + "/image/upload";
+        const res = await fetch(uploadUrl, { method: "POST", body: formData });
+        const data = await res.json();
 
-        if(supportsWebpEncoding()){
-          const webpBlob = await fileToWebpBlob(file, 0.85);
-          if(webpBlob){
-            const webpRef = storage.ref("products/" + baseId + "_" + Date.now() + ".webp");
-            await webpRef.put(webpBlob);
-            const webpUrl = await webpRef.getDownloadURL();
-            document.getElementById("fieldImgWebp").value = webpUrl;
-            statusEl.textContent = "Foto enviada (versão .webp gerada automaticamente).";
-            return;
-          }
+        if(!res.ok || !data.secure_url){
+          throw new Error((data.error && data.error.message) || "Falha no envio.");
         }
 
-        document.getElementById("fieldImgWebp").value = "";
-        statusEl.textContent = "Foto enviada (não foi possível gerar a versão .webp neste navegador, mas a foto normal funciona sem problema).";
+        const originalUrl = data.secure_url;
+        const webpUrl = originalUrl.replace("/upload/", "/upload/f_webp,q_auto/");
+
+        document.getElementById("fieldImg").value = originalUrl;
+        document.getElementById("fieldImgWebp").value = webpUrl;
+        previewEl.src = originalUrl;
+        previewEl.style.display = "block";
+        statusEl.textContent = "Foto enviada (versão .webp gerada automaticamente pelo Cloudinary).";
       } catch(err){
         statusEl.textContent = "Erro ao enviar foto: " + err.message;
       }
