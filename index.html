@@ -1131,12 +1131,14 @@
       if (!overlay) return;
 
       overlay.innerHTML = "";
-      const count = 150 + Math.round(Math.random() * 70); // 150–220 pipocas, tela quase cheia
+      const isSmallScreen = window.innerWidth < 640;
+      const count = (isSmallScreen ? 55 : 80) + Math.round(Math.random() * (isSmallScreen ? 25 : 35));
 
       const w = window.innerWidth;
       const h = window.innerHeight;
       const originX = w * 0.5;
       const originY = h * 0.58;
+      const fragment = document.createDocumentFragment();
 
       for (let i = 0; i < count; i++) {
         const el = document.createElement("div");
@@ -1197,9 +1199,10 @@
         const delay = Math.round(Math.random() * 260);
         el.style.animation = `popExplode ${dur}ms ease-out ${delay}ms forwards`;
 
-        overlay.appendChild(el);
+        fragment.appendChild(el);
       }
 
+      overlay.appendChild(fragment);
       setTimeout(() => { overlay.innerHTML = ""; }, 4200);
     }
 

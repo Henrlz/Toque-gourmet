@@ -1133,8 +1133,8 @@ footer{
   background-position: center;
   opacity: 0;
   transform: translate(-50%, -50%) scale(.8) rotate(0deg);
-  filter: drop-shadow(0 14px 18px rgba(0,0,0,.22));
   will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 @keyframes popExplode{
   0%{

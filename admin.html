@@ -226,13 +226,6 @@
       appId: "1:374853775326:web:7f1cabb4fabd5fb2d9b74f"
     };
 
-    // Preencha depois de criar uma conta gratuita em cloudinary.com e um
-    // "upload preset" com Signing Mode = Unsigned (Settings > Upload).
-    const CLOUDINARY_CONFIG = {
-      cloudName: "COLOQUE_AQUI",
-      uploadPreset: "COLOQUE_AQUI"
-    };
-
     const PRICE_TRAD = 17.00;
     const PRICE_VIP  = 20.00;
 
@@ -302,9 +295,66 @@
       });
     }
 
-    function cloudinaryReady(){
-      return !!(CLOUDINARY_CONFIG.cloudName && CLOUDINARY_CONFIG.cloudName.indexOf("COLOQUE_AQUI") !== 0
-        && CLOUDINARY_CONFIG.uploadPreset && CLOUDINARY_CONFIG.uploadPreset.indexOf("COLOQUE_AQUI") !== 0);
+    function supportsWebpEncoding(){
+      const canvas = document.createElement("canvas");
+      canvas.width = 1;
+      canvas.height = 1;
+      return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0;
+    }
+
+    function resizeFile(file, maxDim, mime, quality){
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = () => {
+          img.onload = () => {
+            let { width, height } = img;
+            if(width > maxDim || height > maxDim){
+              if(width > height){ height = Math.round(height * (maxDim / width)); width = maxDim; }
+              else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+            canvas.toBlob((blob) => {
+              if(!blob){ reject(new Error("Não foi possível processar a imagem.")); return; }
+              resolve(blob);
+            }, mime, quality);
+          };
+          img.onerror = () => reject(new Error("Não foi possível ler a imagem."));
+          img.src = reader.result;
+        };
+        reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function blobToBase64(blob){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(",")[1]);
+        reader.onerror = () => reject(new Error("Não foi possível converter a imagem."));
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function uploadPhotoBlob(blob, fileName){
+      const idToken = await firebase.auth().currentUser.getIdToken();
+      const fileBase64 = await blobToBase64(blob);
+      const res = await fetch("/api/upload-photo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-firebase-token": idToken,
+        },
+        body: JSON.stringify({ fileBase64, fileName, contentType: blob.type }),
+      });
+      const data = await res.json();
+      if(!res.ok || !data.url){
+        throw new Error(data.error || "Falha no envio.");
+      }
+      return data.url;
     }
 
     async function handlePhotoPick(event){
@@ -313,36 +363,24 @@
 
       const statusEl = document.getElementById("photoStatus");
       const previewEl = document.getElementById("photoPreview");
-
-      if(!cloudinaryReady()){
-        statusEl.textContent = "O Cloudinary ainda não foi configurado neste arquivo. Use a opção de link de foto abaixo por enquanto.";
-        return;
-      }
-
-      statusEl.textContent = "Enviando foto...";
+      statusEl.textContent = "Processando e enviando foto...";
 
       try{
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
-        formData.append("folder", "products");
-
-        const uploadUrl = "https://api.cloudinary.com/v1_1/" + CLOUDINARY_CONFIG.cloudName + "/image/upload";
-        const res = await fetch(uploadUrl, { method: "POST", body: formData });
-        const data = await res.json();
-
-        if(!res.ok || !data.secure_url){
-          throw new Error((data.error && data.error.message) || "Falha no envio.");
-        }
-
-        const originalUrl = data.secure_url;
-        const webpUrl = originalUrl.replace("/upload/", "/upload/f_webp,q_auto/");
-
-        document.getElementById("fieldImg").value = originalUrl;
-        document.getElementById("fieldImgWebp").value = webpUrl;
-        previewEl.src = originalUrl;
+        const jpegBlob = await resizeFile(file, 900, "image/jpeg", 0.8);
+        const jpegUrl = await uploadPhotoBlob(jpegBlob, "foto.jpg");
+        document.getElementById("fieldImg").value = jpegUrl;
+        previewEl.src = jpegUrl;
         previewEl.style.display = "block";
-        statusEl.textContent = "Foto enviada (versão .webp gerada automaticamente pelo Cloudinary).";
+
+        if(supportsWebpEncoding()){
+          const webpBlob = await resizeFile(file, 900, "image/webp", 0.8);
+          const webpUrl = await uploadPhotoBlob(webpBlob, "foto.webp");
+          document.getElementById("fieldImgWebp").value = webpUrl;
+          statusEl.textContent = "Foto enviada (com versão .webp).";
+        } else {
+          document.getElementById("fieldImgWebp").value = "";
+          statusEl.textContent = "Foto enviada.";
+        }
       } catch(err){
         statusEl.textContent = "Erro ao enviar foto: " + err.message;
       }
