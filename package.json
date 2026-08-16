@@ -1,8 +1,0 @@
-{
-  "name": "toque-gourmet-especial",
-  "private": true,
-  "description": "Site estático da Toque Gourmet Especial, com uma função serverless (/api) usada pelo painel admin para upload de fotos.",
-  "dependencies": {
-    "@vercel/blob": "^2.8.0"
-  }
-}

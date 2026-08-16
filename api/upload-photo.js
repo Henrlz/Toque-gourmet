@@ -1,12 +1,11 @@
 // Função serverless (Vercel). Recebe uma foto (base64) do admin.html,
 // confirma que quem está enviando tem uma sessão válida do Firebase Auth
-// (o mesmo login usado no painel) e só então grava no Vercel Blob.
-// O token de leitura/escrita do Blob fica só nas variáveis de ambiente
-// do Vercel (BLOB_READ_WRITE_TOKEN) e nunca é exposto ao navegador.
-
-const { put } = require("@vercel/blob");
+// (o mesmo login usado no painel) e só então grava no Supabase Storage.
+// A chave secreta (service_role) fica só nas variáveis de ambiente do
+// Vercel e nunca é exposta ao navegador.
 
 const FIREBASE_API_KEY = "AIzaSyAdz5zKoPHdLnLqoFjrtQBmpeL9upQvsKA";
+const SUPABASE_BUCKET = "products-photos";
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -40,21 +39,37 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      res.status(500).json({ error: "O Vercel Blob ainda não foi conectado a este projeto (falta BLOB_READ_WRITE_TOKEN)." });
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !serviceKey) {
+      res.status(500).json({ error: "O Supabase ainda não foi configurado nas variáveis de ambiente do Vercel (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)." });
       return;
     }
 
     const buffer = Buffer.from(fileBase64, "base64");
     const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `products/${Date.now()}_${safeName}`;
+    const path = `${Date.now()}_${safeName}`;
 
-    const blob = await put(path, buffer, {
-      access: "public",
-      contentType: contentType || "application/octet-stream",
-    });
+    const uploadRes = await fetch(
+      `${supabaseUrl}/storage/v1/object/${SUPABASE_BUCKET}/${path}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          "Content-Type": contentType || "application/octet-stream",
+        },
+        body: buffer,
+      }
+    );
 
-    res.status(200).json({ url: blob.url });
+    if (!uploadRes.ok) {
+      const text = await uploadRes.text();
+      res.status(502).json({ error: "Falha ao enviar para o Supabase: " + text });
+      return;
+    }
+
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/${SUPABASE_BUCKET}/${path}`;
+    res.status(200).json({ url: publicUrl });
   } catch (err) {
     res.status(500).json({ error: "Erro inesperado: " + err.message });
   }
