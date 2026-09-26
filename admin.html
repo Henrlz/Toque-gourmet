@@ -177,6 +177,14 @@
         </div>
 
         <div class="admin-field">
+          <label for="fieldTag">Etiqueta (opcional)</label>
+          <input id="fieldTag" type="text" maxlength="14" placeholder="Ex: Mais vendido, Novo">
+          <div style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;">
+            Aparece como etiqueta colada no card. Deixe vazio para nenhuma — sabor VIP já ganha a dele.
+          </div>
+        </div>
+
+        <div class="admin-field">
           <label for="fieldPhoto">Foto do sabor</label>
           <input id="fieldPhoto" type="file" accept="image/*" onchange="handlePhotoPick(event)">
           <div id="photoStatus" style="font-size:11px; color:rgba(0,0,0,.55); margin-top:6px;"></div>
@@ -401,6 +409,7 @@
       document.getElementById("fieldPrice").value = "";
       document.getElementById("fieldGrams").value = "100";
       document.getElementById("fieldDesc").value = "";
+      document.getElementById("fieldTag").value = "";
       document.getElementById("fieldImg").value = "";
       document.getElementById("fieldImgWebp").value = "";
       document.getElementById("fieldPhoto").value = "";
@@ -420,6 +429,7 @@
       document.getElementById("fieldPrice").value = p.price || "";
       document.getElementById("fieldGrams").value = p.grams || 100;
       document.getElementById("fieldDesc").value = p.desc || "";
+      document.getElementById("fieldTag").value = p.tag || "";
       document.getElementById("fieldImg").value = p.img || "";
       document.getElementById("fieldImgWebp").value = p.imgWebp || "";
       document.getElementById("photoStatus").textContent = "Foto atual abaixo. Escolha um novo arquivo só se quiser trocar.";
@@ -439,6 +449,7 @@
       const price = parseFloat(document.getElementById("fieldPrice").value);
       const grams = parseInt(document.getElementById("fieldGrams").value, 10) || 100;
       const desc = document.getElementById("fieldDesc").value.trim();
+      const tag = document.getElementById("fieldTag").value.trim();
       const img = document.getElementById("fieldImg").value.trim();
       const imgWebp = document.getElementById("fieldImgWebp").value.trim();
       const editId = document.getElementById("editId").value;
@@ -450,6 +461,9 @@
 
       const id = editId || slugify(name);
       const data = { name, category, price, grams, desc, img };
+      // set() sem merge já reescreve o documento inteiro, então basta omitir
+      // a etiqueta para ela sumir do sabor.
+      if(tag) data.tag = tag;
       if(imgWebp) data.imgWebp = imgWebp;
 
       firebase.firestore().collection("products").doc(id).set(data)

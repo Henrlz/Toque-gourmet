@@ -351,7 +351,7 @@
 
                   <div class="bucket-actions">
                     <button class="btn-secondary" type="button" onclick="resetBucket()">Limpar seleção</button>
-                    <button class="btn-cart" type="button" onclick="addBucketToCart()">Adicionar ao carrinho</button>
+                    <button class="btn-cart" type="button" onclick="addBucketToCart(this)">Adicionar ao carrinho</button>
                   </div>
 
                   <div class="bucket-price">
@@ -499,15 +499,24 @@
       const pictureHTML = p.imgWebp
         ? `<picture><source type="image/webp" srcset="${p.imgWebp}"><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`
         : `<picture><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`;
+      // A etiqueta vem do campo "tag" do produto (definido no painel). Sem
+      // ela, sabor VIP ganha a sua automaticamente.
+      const rotulo = (p.tag || "").trim() || (p.category === "VIP" ? "VIP" : "");
+      const classeRotulo = /vip/i.test(rotulo) ? " is-vip" : (/novo/i.test(rotulo) ? " is-novo" : "");
+      const tagHTML = rotulo
+        ? `<span class="tag-paper${classeRotulo}">${escapeHtml(rotulo)}</span>`
+        : "";
+
       return `
         <article class="card">
+          ${tagHTML}
           <div class="img">${pictureHTML}</div>
           <div class="body">
             <h3>${p.name}</h3>
             <div class="meta-pill">Saquinho ${p.grams || 100}g</div>
             <p>${p.desc || ""}</p>
             <div class="price">Valor: ${priceLabel}</div>
-            <button class="btn-cart" type="button" onclick="addToCart('${p.id}')">Adicionar</button>
+            <button class="btn-cart" type="button" onclick="addToCart('${p.id}', this)">Adicionar</button>
           </div>
         </article>`;
     }
@@ -647,13 +656,61 @@
       return Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
     }
 
-    function addToCart(productId){
+    function addToCart(productId, origem){
       if(!catalog[productId]) return;
       const key = `prod:${productId}`;
       if(!cart[key]) cart[key] = { key, type:"product", productId, qty: 0 };
       cart[key].qty += 1;
+      pipocaVoando(origem);
+      pularBadge();
       updateCartUI();
       openCart();
+    }
+
+    /* ===== Microinterações do carrinho ===== */
+
+    function pularBadge(){
+      const badge = document.getElementById("cartBadge");
+      if(!badge) return;
+      badge.classList.remove("pulou");
+      void badge.offsetWidth; // reinicia a animação se clicar em sequência
+      badge.classList.add("pulou");
+    }
+
+    // Joga algumas pipocas do botão até o ícone do carrinho. É só enfeite:
+    // se algo faltar, sai sem fazer nada e o item entra no carrinho igual.
+    function pipocaVoando(origem){
+      if(!origem || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const alvo = document.getElementById("cartBadge");
+      if(!alvo) return;
+
+      const de = origem.getBoundingClientRect();
+      const para = alvo.getBoundingClientRect();
+      const destinoX = para.left + para.width / 2;
+      const destinoY = para.top + para.height / 2;
+
+      for(let i = 0; i < 7; i++){
+        const pipoca = document.createElement("div");
+        pipoca.className = "pop-fly";
+        pipoca.style.backgroundImage = `url('${POPCORN_IMG_FILE}')`;
+        const saiX = de.left + de.width / 2 + (Math.random() * 40 - 20);
+        const saiY = de.top + de.height / 2 + (Math.random() * 16 - 8);
+        pipoca.style.left = `${saiX}px`;
+        pipoca.style.top = `${saiY}px`;
+        document.body.appendChild(pipoca);
+
+        const anim = pipoca.animate([
+          { transform: "translate(0,0) scale(.6) rotate(0deg)", opacity: 0 },
+          { transform: `translate(${(Math.random() * 60 - 30)}px, -46px) scale(1.1) rotate(${Math.random() * 180 - 90}deg)`, opacity: 1, offset: .28 },
+          { transform: `translate(${destinoX - saiX}px, ${destinoY - saiY}px) scale(.3) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], {
+          duration: 700 + Math.random() * 260,
+          easing: "cubic-bezier(.3,.6,.3,1)",
+          delay: i * 45
+        });
+        anim.onfinish = () => pipoca.remove();
+        anim.oncancel = () => pipoca.remove();
+      }
     }
 
     /* ===== Baldes ===== */
@@ -798,7 +855,7 @@
       loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Balde ${size}`);
     }
 
-    function addBucketToCart(){
+    function addBucketToCart(origem){
       const size = document.getElementById("bucketSize").value || "M";
       const qty = Math.max(1, parseInt(document.getElementById("bucketQty").value || "1", 10) || 1);
 
@@ -826,6 +883,8 @@
       }
       cart[configKey].qty += qty;
 
+      pipocaVoando(origem);
+      pularBadge();
       updateCartUI();
       openCart();
     }

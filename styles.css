@@ -75,7 +75,7 @@ header{
   color: var(--gold);
   font-weight: 600;
   font-size: 12px;
-  letter-spacing: 2.2px;
+  letter-spacing: 1.3px;
   text-transform: uppercase;
   padding: 8px 10px;
   border-radius: 999px;
@@ -331,10 +331,9 @@ header{
   position: relative;
   z-index:1;
   font-family:"Playfair Display", serif;
-  font-size: 36px;
-  letter-spacing: 1px;
+  font-size: 38px;
+  letter-spacing: .2px;
   color:#fff;
-  text-transform: uppercase;
   font-weight: 700;
   text-shadow: 0 14px 30px rgba(0,0,0,.45);
   line-height: 1.15;
@@ -533,10 +532,9 @@ header{
   display:inline-flex;
   align-items:center;
   gap: 8px;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 1.1px;
-  text-transform: uppercase;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .2px;
   color: rgba(0,0,0,.70);
   padding: 7px 12px;
   border: 1px solid rgba(0,0,0,.10);
@@ -547,11 +545,10 @@ header{
 }
 
 .price{
-  font-size: 11px;
-  font-weight: 900;
-  color: rgba(0,0,0,.72);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0,0,0,.78);
+  letter-spacing: .1px;
 }
 
 .btn-cart{
@@ -1248,4 +1245,81 @@ html{ scroll-behavior: smooth; }
 }
 @media (max-width: 520px){
   .cookie-banner{ left:10px; right:10px; bottom:10px; padding:14px; }
+}
+
+/* ===== Etiquetas de papel =====
+   Rótulo colado torto no card, como etiqueta de preço escrita à mão. Fica
+   dentro do card porque .card tem overflow:hidden para arredondar a foto. */
+.card{ position: relative; }
+
+.tag-paper{
+  position:absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  transform: rotate(-4deg);
+  background: #fffdf3;
+  color: var(--gold-dark);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1px dashed rgba(138,97,22,.55);
+  box-shadow: 0 6px 14px rgba(0,0,0,.14);
+  pointer-events:none;
+}
+
+.tag-paper.is-vip{
+  background: linear-gradient(180deg, #d0a03f, var(--gold-dark));
+  color: #fff;
+  border-style: solid;
+  border-color: rgba(255,255,255,.55);
+}
+
+.tag-paper.is-novo{
+  background: #fff;
+  color: #9a3b18;
+  border-color: rgba(154,59,24,.5);
+}
+
+/* ===== Microinterações ===== */
+.card .img img{ transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.card:hover{ transform: translateY(-5px); }
+.card:hover .img img{ transform: scale(1.06); }
+.card:hover .tag-paper{ transform: rotate(-6deg) scale(1.04); }
+.tag-paper{ transition: transform .25s ease; }
+
+.btn-cart{ transition: transform .12s ease, box-shadow .12s ease, filter .15s ease; }
+.btn-cart:hover{ filter: brightness(1.06); }
+.btn-cart:active{ transform: scale(.95); }
+
+/* o contador do carrinho dá um pulinho quando entra item */
+.badge{ transition: transform .18s ease; }
+.badge.pulou{ animation: badge-pulo .45s cubic-bezier(.2,.9,.25,1.2); }
+
+@keyframes badge-pulo{
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.65); background:#b8892f; }
+  100% { transform: scale(1); }
+}
+
+/* pipoca que voa do botão até o carrinho ao adicionar */
+.pop-fly{
+  position: fixed;
+  z-index: 9999;
+  width: 26px;
+  height: 26px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .card:hover{ transform:none; }
+  .card:hover .img img{ transform:none; }
+  .badge.pulou{ animation:none; }
+  .pop-fly{ display:none; }
 }
