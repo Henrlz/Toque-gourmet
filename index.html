@@ -667,10 +667,10 @@
       const key = `prod:${productId}`;
       if(!cart[key]) cart[key] = { key, type:"product", productId, qty: 0 };
       cart[key].qty += 1;
-      pipocaVoando(origem);
-      pularBadge();
       updateCartUI();
       openCart();
+      pipocaVoando(origem);
+      pularBadge();
     }
 
     /* ===== Microinterações do carrinho ===== */
@@ -683,17 +683,39 @@
       badge.classList.add("pulou");
     }
 
-    // Joga algumas pipocas do botão até o ícone do carrinho. É só enfeite:
+    // Onde as pipocas devem pousar. Com a gaveta aberta o selo do cabeçalho
+    // fica escondido atrás dela, e as pipocas sumiam num ponto vazio em cima
+    // do painel branco. Nesse caso a mira vai para o título "Carrinho", que
+    // continua à vista.
+    function alvoDaPipoca(){
+      const gaveta = document.getElementById("cartDrawer");
+      const abrindo = gaveta && gaveta.classList.contains("open");
+      const alvo = abrindo
+        ? gaveta.querySelector(".cart-head h3")
+        : document.getElementById("cartBadge");
+      if(!alvo) return null;
+
+      // A gaveta pode estar no meio do deslize: desconta o que ela ainda tem
+      // que andar, senão a mira cai fora da tela.
+      let falta = 0;
+      if(abrindo){
+        falta = Math.max(0, gaveta.getBoundingClientRect().right - window.innerWidth);
+      }
+
+      const r = alvo.getBoundingClientRect();
+      return { x: r.left + r.width / 2 - falta, y: r.top + r.height / 2 };
+    }
+
+    // Joga algumas pipocas do botão até o carrinho. É só enfeite:
     // se algo faltar, sai sem fazer nada e o item entra no carrinho igual.
     function pipocaVoando(origem){
       if(!origem || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      const alvo = document.getElementById("cartBadge");
-      if(!alvo) return;
+      const para = alvoDaPipoca();
+      if(!para) return;
 
       const de = origem.getBoundingClientRect();
-      const para = alvo.getBoundingClientRect();
-      const destinoX = para.left + para.width / 2;
-      const destinoY = para.top + para.height / 2;
+      const destinoX = para.x;
+      const destinoY = para.y;
 
       for(let i = 0; i < 7; i++){
         const pipoca = document.createElement("div");
@@ -918,10 +940,10 @@
       }
       cart[configKey].qty += qty;
 
-      pipocaVoando(origem);
-      pularBadge();
       updateCartUI();
       openCart();
+      pipocaVoando(origem);
+      pularBadge();
     }
 
     function incQty(key){
