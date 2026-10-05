@@ -79,9 +79,9 @@
           "@type": "OfferCatalog",
           "name": "Baldes",
           "itemListElement": [
-            { "@type": "Offer", "priceCurrency": "BRL", "price": "25.00", "itemOffered": { "@type": "Product", "name": "Balde P" } },
-            { "@type": "Offer", "priceCurrency": "BRL", "price": "35.00", "itemOffered": { "@type": "Product", "name": "Balde M" } },
-            { "@type": "Offer", "priceCurrency": "BRL", "price": "45.00", "itemOffered": { "@type": "Product", "name": "Balde G" } }
+            { "@type": "Offer", "priceCurrency": "BRL", "price": "30.00", "itemOffered": { "@type": "Product", "name": "Balde P (500 ml)" } },
+            { "@type": "Offer", "priceCurrency": "BRL", "price": "45.00", "itemOffered": { "@type": "Product", "name": "Balde M (1 litro)" } },
+            { "@type": "Offer", "priceCurrency": "BRL", "price": "60.00", "itemOffered": { "@type": "Product", "name": "Balde G (1,5 litros)" } }
           ]
         }
       ]
@@ -265,7 +265,7 @@
         <button class="tray-lid" type="button" aria-expanded="false" onclick="toggleTray('tray-buckets')">
           <div class="tray-title">
             <strong>Baldes</strong>
-            <span id="resumoBaldes">Balde P: R$ 25,00 • Balde M: R$ 35,00 • Balde G: R$ 45,00</span>
+            <span id="resumoBaldes">P 500 ml: R$ 30,00 • M 1 litro: R$ 45,00 • G 1,5 litros: R$ 60,00</span>
           </div>
           <div class="tray-badge">
             <div class="pill">Abrir</div>
@@ -292,13 +292,13 @@
                 <!-- Preview (encaixa sem cortar e sem zoom) -->
                 <div id="bucketPreview" class="bucket-preview" aria-label="Prévia do balde">
                   <div class="photo" id="bucketPhotoBox">
-                    <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde (Balde M)</div>
+                    <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde (Balde M — 1 litro)</div>
                     <img id="bucketPhoto" alt="Foto do balde" style="display:none;" />
                   </div>
 
                   <div class="info">
-                    <div class="line">Tamanho selecionado: <span id="bucketSelectedSize">Balde M</span></div>
-                    <div class="small" id="bucketSelectedPrice">Valor unitário: R$ 35,00</div>
+                    <div class="line">Tamanho selecionado: <span id="bucketSelectedSize">Balde M (1 litro)</span></div>
+                    <div class="small" id="bucketSelectedPrice">Valor unitário: R$ 45,00</div>
                     <div class="small">
                       Arquivos aceitos automaticamente (com variações de nome):<br>
                       <strong>Balde P.png</strong> / <strong>balde P.png</strong> •
@@ -312,9 +312,9 @@
                   <div class="field">
                     <label for="bucketSize">Tamanho</label>
                     <select id="bucketSize" class="select">
-                      <option value="P">Balde P</option>
-                      <option value="M" selected>Balde M</option>
-                      <option value="G">Balde G</option>
+                      <option value="P">Balde P — 500 ml</option>
+                      <option value="M" selected>Balde M — 1 litro</option>
+                      <option value="G">Balde G — 1,5 litros</option>
                     </select>
                   </div>
 
@@ -356,7 +356,7 @@
 
                   <div class="bucket-price">
                     <div class="label">Valor do balde (unitário)</div>
-                    <div class="value" id="bucketUnitPrice">R$ 35,00</div>
+                    <div class="value" id="bucketUnitPrice">R$ 45,00</div>
                   </div>
                 </div>
 
@@ -463,13 +463,16 @@
 
     const PRICE_TRAD = 17.00; // saquinho 100g
     const PRICE_VIP  = 20.00; // saquinho 100g
-    /* Reajuste agendado: a tabela nova entra sozinha na virada de 01/10/2026,
-       sem precisar publicar nada no dia. Até lá vale a tabela atual.
-       Para um novo reajuste, mude REAJUSTE e PRECOS_NOVOS. */
-    const PRECOS_ATUAIS = { P: 25.00, M: 35.00, G: 45.00 };
-    const PRECOS_NOVOS  = { P: 30.00, M: 45.00, G: 60.00 };
-    const REAJUSTE = new Date(2026, 9, 1);   // mês 9 = outubro
-    const BUCKET_PRICES = new Date() >= REAJUSTE ? PRECOS_NOVOS : PRECOS_ATUAIS;
+    /* Tabela dos baldes, conforme o cartaz da loja. Mexeu aqui, muda em todo
+       o site: resumo, seletor, carrinho, WhatsApp e dado estruturado. */
+    const BUCKET_PRICES  = { P: 30.00, M: 45.00, G: 60.00 };
+    const BUCKET_VOLUMES = { P: "500 ml", M: "1 litro", G: "1,5 litros" };
+
+    // "Balde M (1 litro)" — o nome que o cliente vê em qualquer lugar.
+    function nomeDoBalde(size){
+      const vol = BUCKET_VOLUMES[size];
+      return vol ? `Balde ${size} (${vol})` : `Balde ${size}`;
+    }
 
     // Preencha com o config do seu projeto Firebase (Configurações do projeto > Seus apps).
     // Esses valores são públicos por natureza (uso no cliente), não são segredos.
@@ -868,7 +871,7 @@
       const resumo = document.getElementById("resumoBaldes");
       if(resumo){
         resumo.textContent = ["P","M","G"]
-          .map((t) => `Balde ${t}: ${formatBRL(BUCKET_PRICES[t])}`)
+          .map((t) => `${t} ${BUCKET_VOLUMES[t]}: ${formatBRL(BUCKET_PRICES[t])}`)
           .join(" • ");
       }
 
@@ -882,7 +885,9 @@
           if(cat.name !== "Baldes") return;
           cat.itemListElement.forEach((oferta) => {
             const tam = (oferta.itemOffered?.name || "").split(" ")[1];
-            if(BUCKET_PRICES[tam] != null) oferta.price = BUCKET_PRICES[tam].toFixed(2);
+            if(BUCKET_PRICES[tam] == null) return;
+            oferta.price = BUCKET_PRICES[tam].toFixed(2);
+            if(oferta.itemOffered) oferta.itemOffered.name = nomeDoBalde(tam);
           });
         });
         ld.textContent = JSON.stringify(dados, null, 2);
@@ -895,13 +900,13 @@
       const size = bucketState.size; // P/M/G
       const price = BUCKET_PRICES[size];
 
-      document.getElementById("bucketSelectedSize").textContent = `Balde ${size}`;
+      document.getElementById("bucketSelectedSize").textContent = nomeDoBalde(size);
       document.getElementById("bucketSelectedPrice").textContent = `Valor unitário: ${formatBRL(price)}`;
       document.getElementById("bucketUnitPrice").textContent = formatBRL(price);
 
       const photo = document.getElementById("bucketPhoto");
       const ph = document.getElementById("bucketPhotoPlaceholder");
-      ph.textContent = `Foto do Balde ${size}`;
+      ph.textContent = `Foto do ${nomeDoBalde(size)}`;
 
       const candidatesBySize = {
         P: ["Balde P.webp", "Balde P.png", "balde P.png", "Balde P.PNG", "balde P.PNG"],
@@ -1015,7 +1020,7 @@
           meta = `Saquinho ${prod?.grams ?? 100}g • ${prod?.category ?? "—"}`;
           unitPrice = prod?.price ?? 0;
         } else {
-          name = `Balde ${item.size}`;
+          name = nomeDoBalde(item.size);
           meta = `Sabores: ${item.flavors.join(" + ")}`;
           unitPrice = item.price ?? 0;
         }
@@ -1101,7 +1106,7 @@
       );
 
       addGroup("Baldes", buckets
-        .map(b => `${b.qty}x Balde ${b.size} - ${b.flavors.join(" + ")} (un: ${formatBRL(b.price)})`)
+        .map(b => `${b.qty}x ${nomeDoBalde(b.size)} - ${b.flavors.join(" + ")} (un: ${formatBRL(b.price)})`)
       );
 
       const { total } = calculateTotals();
