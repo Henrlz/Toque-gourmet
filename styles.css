@@ -1822,3 +1822,23 @@ html{ scroll-behavior: smooth; }
 @media (max-width: 820px){
   .monta-vitrine{ position: relative; top: 0; }
 }
+
+/* troca de tamanho do balde: a foto vira como um cartão e o pote dá um pulinho */
+.monta-vitrine{ perspective: 700px; }
+.monta-foto.virando{ animation: foto-vira .45s ease-in-out; }
+@keyframes foto-vira{
+  0%   { transform: rotate(3deg); }
+  44%  { transform: rotate(3deg) rotateY(90deg) scale(.92); }
+  56%  { transform: rotate(3deg) rotateY(90deg) scale(.92); }
+  100% { transform: rotate(3deg); }
+}
+.pote.pulando{ animation: pote-pula .5s cubic-bezier(.3,1.4,.5,1); }
+@keyframes pote-pula{
+  0%   { transform: translateY(0); }
+  35%  { transform: translateY(-12px); }
+  70%  { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .monta-foto.virando, .pote.pulando{ animation: none; }
+}

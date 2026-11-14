@@ -977,13 +977,14 @@
       // só a camada de cima tem os "carocinhos"; embaixo é a massa de pipoca
       for(let x = 26; x < 200; x += 17) bolas.push({ x: x + rnd() * 6 - 3, y: 86 + rnd() * 10, r: 13 + rnd() * 4 });
       for(let i = 0; i < 9; i++) bolas.push({ x: 50 + rnd() * 120, y: 125 + rnd() * 95, r: 9 + rnd() * 4, solto: true });
+      // já nasce na cor de pipoca (sem isso o pote aparece escuro por um instante)
       alvo.innerHTML =
-        '<rect class="pipoca-pote lado-e" x="20" y="92" width="90" height="150"/>' +
-        '<rect class="pipoca-pote lado-d" x="110" y="92" width="90" height="150"/>' +
+        `<rect class="pipoca-pote lado-e" x="20" y="92" width="90" height="150" fill="${COR_SEM_SABOR}"/>` +
+        `<rect class="pipoca-pote lado-d" x="110" y="92" width="90" height="150" fill="${COR_SEM_SABOR}"/>` +
         '<rect x="20" y="92" width="180" height="150" fill="url(#sombraPote)"/>' +
         bolas.map(b => {
           const lado = b.x < 110 ? "e" : "d";
-          return `<g class="pipoca-pote lado-${lado}" stroke="#c9a676" stroke-width="1.4"${b.solto ? ' stroke-opacity=".55"' : ""}>` +
+          return `<g class="pipoca-pote lado-${lado}" fill="${COR_SEM_SABOR}" stroke="#c9a676" stroke-width="1.4"${b.solto ? ' stroke-opacity=".55"' : ""}>` +
             `<circle cx="${(b.x - b.r * .4).toFixed(1)}" cy="${(b.y + b.r * .2).toFixed(1)}" r="${(b.r * .65).toFixed(1)}"/>` +
             `<circle cx="${(b.x + b.r * .45).toFixed(1)}" cy="${(b.y + b.r * .25).toFixed(1)}" r="${(b.r * .6).toFixed(1)}"/>` +
             `<circle cx="${b.x.toFixed(1)}" cy="${(b.y - b.r * .25).toFixed(1)}" r="${(b.r * .72).toFixed(1)}"/></g>`;
@@ -1123,8 +1124,32 @@
           M: ["balde M.webp", "balde M.png", "Balde M.png"],
           G: ["balde G.webp", "balde G.png", "Balde G.png"],
         };
-        loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Foto de exemplo do ${nomeDoBalde(size)}`);
+        const trocarFoto = () => loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Foto de exemplo do ${nomeDoBalde(size)}`);
+
+        // Ao trocar de tamanho: a foto "vira" como um cartão (troca no meio
+        // do giro, quando está de lado) e o pote dá um pulinho.
+        const mudouTamanho = tamanhoMostrado !== null && tamanhoMostrado !== size;
+        tamanhoMostrado = size;
+        const semAnimacao = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if(mudouTamanho && !semAnimacao){
+          const vez = ++trocaDeFoto; // cliques rápidos: só vale a última troca
+          reiniciarAnimacao(document.querySelector(".monta-foto"), "virando");
+          reiniciarAnimacao(document.getElementById("pote"), "pulando");
+          setTimeout(() => { if(vez === trocaDeFoto) trocarFoto(); }, 200);
+        } else {
+          trocaDeFoto++;
+          trocarFoto();
+        }
       }
+    }
+
+    let tamanhoMostrado = null;
+    let trocaDeFoto = 0;
+    function reiniciarAnimacao(el, classe){
+      if(!el) return;
+      el.classList.remove(classe);
+      void el.getBoundingClientRect(); // força o navegador a recomeçar a animação
+      el.classList.add(classe);
     }
 
     function addBucketToCart(origem){
