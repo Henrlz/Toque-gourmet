@@ -185,7 +185,7 @@
         <!-- SLIDE 2: iFood — a foto da dona da loja + texto de verdade (não imagem) -->
         <div class="slide slide-ifood" data-slide="1">
           <div class="ifood-faixa">
-            <img class="ifood-foto" src="ifood-dona.png" alt="A dona da Toque Gourmet mostrando a loja no celular" decoding="async">
+            <img class="ifood-foto" src="ifood-dona.jpg" alt="A dona da Toque Gourmet mostrando a loja no celular" decoding="async">
             <div class="ifood-texto">
               <p class="ifood-mao">pronta entrega!</p>
               <h2>Estamos no iFood</h2>
@@ -541,8 +541,6 @@
     <button class="btn-primary" type="button" onclick="acceptCookies()">Entendi</button>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
     const WHATSAPP_PHONE = "5519953243215";
     const POPCORN_IMG_FILE = "pipoca.png";
@@ -610,7 +608,9 @@
       const priceLabel = formatBRL(Number(p.price) || 0);
       const imgSrc = p.img || "";
       const pictureHTML = p.imgWebp
-        ? `<picture><source type="image/webp" srcset="${p.imgWebp}"><img src="${imgSrc}" alt="${p.name}" decoding="async"></picture>`
+        // espaço no nome do arquivo quebra o srcset (o navegador desistia do
+        // .webp leve e baixava o .png de até 1,9 MB): troca por %20
+        ? `<picture><source type="image/webp" srcset="${String(p.imgWebp).replace(/ /g, "%20")}"><img src="${imgSrc}" alt="${p.name}" decoding="async"></picture>`
         : `<picture><img src="${imgSrc}" alt="${p.name}" decoding="async"></picture>`;
       // A etiqueta vem do campo "tag" do produto (definido no painel). Sem
       // ela, sabor VIP ganha a sua automaticamente.
@@ -684,21 +684,40 @@
 
     renderProducts(FALLBACK_PRODUCTS, false);
 
+    // Lê os sabores do painel com uma consulta direta (leitura pública do
+    // Firestore). Antes o site baixava a biblioteca inteira do Firebase e
+    // abria uma conexão que segurava o carregamento por mais de 1 segundo.
+    // O painel admin continua usando a biblioteca, porque precisa do login.
+    function valorDoCampo(c){
+      if(!c) return undefined;
+      if("stringValue" in c) return c.stringValue;
+      if("doubleValue" in c) return Number(c.doubleValue);
+      if("integerValue" in c) return Number(c.integerValue);
+      if("booleanValue" in c) return c.booleanValue;
+      return undefined;
+    }
+
     function loadProductsFromFirestore(){
       if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.indexOf("COLOQUE_AQUI") === 0) return;
-      try{
-        if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-        firebase.firestore().collection("products").get().then((snap) => {
-          if(snap.empty) return;
-          const products = [];
-          snap.forEach((doc) => products.push({ id: doc.id, ...doc.data() }));
+      const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/products?pageSize=300&key=${FIREBASE_CONFIG.apiKey}`;
+      fetch(url)
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
+        .then((dados) => {
+          const docs = dados.documents || [];
+          if(!docs.length) return;
+          const products = docs.map((doc) => {
+            const p = { id: doc.name.split("/").pop() };
+            Object.keys(doc.fields || {}).forEach((k) => {
+              const v = valorDoCampo(doc.fields[k]);
+              if(v !== undefined) p[k] = v;
+            });
+            return p;
+          });
           renderProducts(products, true);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.warn("Não foi possível carregar produtos do Firestore, usando catálogo padrão.", err);
         });
-      } catch(e){
-        console.warn("Firebase não configurado, usando catálogo padrão.", e);
-      }
     }
 
     loadProductsFromFirestore();
