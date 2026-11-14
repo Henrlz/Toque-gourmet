@@ -326,6 +326,12 @@
                       </g>
                     </g>
                   </svg>
+                  <!-- foto de exemplo do balde no tamanho escolhido -->
+                  <figure class="monta-foto">
+                    <div class="placeholder" id="bucketPhotoPlaceholder">Foto do balde</div>
+                    <img id="bucketPhoto" alt="Foto de exemplo do balde" style="display:none;" />
+                    <figcaption>foto de exemplo</figcaption>
+                  </figure>
                   <p class="monta-legenda">
                     <span id="bucketSelectedSize">Balde M (1 litro)</span>
                     <small id="poteSabores">escolha os sabores</small>
@@ -640,7 +646,7 @@
       if(changed) saveCart();
     }
 
-    function renderProducts(products){
+    function renderProducts(products, definitiva){
       catalog = {};
       const byCategory = { Tradicional: [], VIP: [] };
 
@@ -655,11 +661,28 @@
       if(gridTrad) gridTrad.innerHTML = byCategory.Tradicional.map(productCardHTML).join("") || emptyMsg;
       if(gridVip) gridVip.innerHTML = byCategory.VIP.map(productCardHTML).join("") || emptyMsg;
 
-      pruneCartAgainstCatalog();
+      // Só descarta do carrinho sabores que sumiram quando a lista é a
+      // definitiva (a do painel). Com a lista de reserva, um sabor novo do
+      // painel ainda não aparece, mas não pode ser apagado do carrinho.
+      if(definitiva) pruneCartAgainstCatalog();
       updateCartUI();
     }
 
-    renderProducts(FALLBACK_PRODUCTS);
+    // O carrinho guardado precisa ser lido ANTES do primeiro desenho: o
+    // desenho salva o carrinho, e antes isso gravava um carrinho vazio por
+    // cima do que o cliente tinha escolhido.
+    (function loadCart(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "{}");
+        for(const key of Object.keys(saved)){
+          const item = saved[key];
+          if(!item || typeof item.qty !== "number" || item.qty <= 0) continue;
+          cart[key] = item;
+        }
+      } catch(e){}
+    })();
+
+    renderProducts(FALLBACK_PRODUCTS, false);
 
     function loadProductsFromFirestore(){
       if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.indexOf("COLOQUE_AQUI") === 0) return;
@@ -669,7 +692,7 @@
           if(snap.empty) return;
           const products = [];
           snap.forEach((doc) => products.push({ id: doc.id, ...doc.data() }));
-          renderProducts(products);
+          renderProducts(products, true);
         }).catch((err) => {
           console.warn("Não foi possível carregar produtos do Firestore, usando catálogo padrão.", err);
         });
@@ -679,18 +702,6 @@
     }
 
     loadProductsFromFirestore();
-
-    (function loadCart(){
-      try{
-        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "{}");
-        for(const key of Object.keys(saved)){
-          const item = saved[key];
-          if(!item || typeof item.qty !== "number" || item.qty <= 0) continue;
-          if(item.type === "product" && !catalog[item.productId]) continue;
-          cart[key] = item;
-        }
-      } catch(e){}
-    })();
 
     function saveCart(){
       try{ localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch(e){}
@@ -759,8 +770,14 @@
       if(el) el.classList.remove("show");
     }
 
+    // Itens que dá pra mostrar e cobrar agora: baldes sempre; saquinhos só se o
+    // sabor já está na lista carregada.
+    function itensDoCarrinho(){
+      return Object.values(cart).filter((item) => item.type !== "product" || !!catalog[item.productId]);
+    }
+
     function cartCount(){
-      return Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+      return itensDoCarrinho().reduce((sum, item) => sum + item.qty, 0);
     }
 
     function addToCart(productId, origem){
@@ -1096,6 +1113,18 @@
 
       atualizarTotalBalde();
       pintarPote();
+
+      // foto de exemplo do tamanho escolhido (com variações de nome de arquivo)
+      const photo = document.getElementById("bucketPhoto");
+      const ph = document.getElementById("bucketPhotoPlaceholder");
+      if(photo && ph){
+        const candidatesBySize = {
+          P: ["Balde P.webp", "Balde P.png", "balde P.png"],
+          M: ["balde M.webp", "balde M.png", "Balde M.png"],
+          G: ["balde G.webp", "balde G.png", "Balde G.png"],
+        };
+        loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Foto de exemplo do ${nomeDoBalde(size)}`);
+      }
     }
 
     function addBucketToCart(origem){
@@ -1157,7 +1186,7 @@
 
     function calculateTotals(){
       let total = 0;
-      for(const item of Object.values(cart)){
+      for(const item of itensDoCarrinho()){
         let unit = 0;
         if(item.type === "product"){
           unit = catalog[item.productId]?.price ?? 0;
@@ -1177,7 +1206,7 @@
 
       const body = document.getElementById("cartBody");
       const totalsBox = document.getElementById("totalsBox");
-      const items = Object.values(cart);
+      const items = itensDoCarrinho();
 
       if(items.length === 0){
         body.innerHTML = `<div class="cart-empty">Seu carrinho está vazio. Adicione um item para montar o pedido.</div>`;
@@ -1225,7 +1254,9 @@
               <button type="button" onclick="incQty('${item.key}')">+</button>
             </div>
 
-            <button class="remove" type="button" onclick="removeItem('${item.key}')">Remover</button>
+            <button class="remove lixeira" type="button" onclick="removeItem('${item.key}')" aria-label="Tirar ${escapeHtml(name)} do carrinho" title="Tirar do carrinho">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v8h2v-8h-2zm4 0v8h2v-8h-2z"/></svg>
+            </button>
           </div>
         `;
       }).join("");
@@ -1244,7 +1275,7 @@
     }
 
     function checkoutWhatsApp(){
-      const items = Object.values(cart);
+      const items = itensDoCarrinho();
       if(items.length === 0){
         openWhatsApp("Olá! Gostaria de fazer um pedido, mas meu carrinho está vazio. Pode me ajudar?");
         return;
@@ -1309,11 +1340,23 @@
     }
 
     /* ===== Bandejas ===== */
+    // Anima até a altura do conteúdo e depois solta ("auto"): assim a bandeja
+    // acompanha sozinha quando os sabores do painel chegam depois de aberta.
     function setTrayHeight(trayEl, open){
       const body = trayEl.querySelector(".tray-body");
       const inner = trayEl.querySelector(".tray-inner");
       if(!body || !inner) return;
-      body.style.height = open ? (inner.scrollHeight + "px") : "0px";
+      clearTimeout(body._soltar);
+      if(open){
+        body.style.height = inner.scrollHeight + "px";
+        body._soltar = setTimeout(() => {
+          if(trayEl.classList.contains("open")) body.style.height = "auto";
+        }, 400);
+      } else {
+        body.style.height = body.scrollHeight + "px";
+        void body.offsetHeight; // garante o ponto de partida da animação
+        body.style.height = "0px";
+      }
     }
 
     function toggleTray(trayId){
