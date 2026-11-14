@@ -174,7 +174,8 @@
       el.appendChild(neve);
     });
 
-    var painel = document.querySelector(".hero-panel");
+    // selo no texto do primeiro slide (ou no quadro antigo, se ele voltar)
+    var painel = document.querySelector(".felicidade-texto, .hero-panel");
     if(painel){
       painel.insertAdjacentHTML("afterbegin", '<div class="natal-selo">' + ESTRELA_SVG + TEXTOS.selo + ESTRELA_SVG + "</div>");
     }

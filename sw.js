@@ -1,4 +1,4 @@
-﻿/* Service worker do Toque Gourmet.
+/* Service worker do Toque Gourmet.
 
    A estratégia é escolhida por tipo de requisição, e o motivo importa:
 
@@ -11,7 +11,7 @@
 
    Ao publicar mudança em arquivo estático, suba o VERSAO para os antigos
    serem descartados. */
-const VERSAO = 'tg-v4';
+const VERSAO = 'tg-v5';
 const CACHE_PAGINAS = `${VERSAO}-paginas`;
 const CACHE_ESTATICOS = `${VERSAO}-estaticos`;
 

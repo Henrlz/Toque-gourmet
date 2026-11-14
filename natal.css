@@ -273,3 +273,7 @@ html.natal .cart-head{
   .natal-neve, .natal-neve-banner{ display:none; }
   .natal-luzes i, .natal-gorro{ animation:none; }
 }
+
+/* ---------- Primeiro slide: o selo de Natal entra no lugar do recadinho ---------- */
+html.natal .felicidade-mao{ display: none; }
+html.natal .felicidade-texto .natal-selo{ margin-bottom: 4px; font-size: 10px; padding: 4px 12px; }
