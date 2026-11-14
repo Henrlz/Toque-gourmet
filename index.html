@@ -547,7 +547,25 @@
       { id:"ninho_nutella",   name:"Ninho com Nutella",   category:"VIP", grams:100, price:PRICE_VIP, desc:"Sucesso de vendas, super cremoso.", img:"ninho co nutella.png", imgWebp:"ninho co nutella.webp" },
     ];
 
+    // As fotos de Morango e Pé de Moleque estavam com os nomes trocados e
+    // foram renomeadas. Produtos cadastrados no painel com os nomes antigos
+    // são redirecionados aqui para a foto certa; fotos novas (enviadas pelo
+    // painel) passam direto.
+    const FOTOS_ANTIGAS = {
+      morango:    { de: /^Pé de molque\.(png|webp)$/i, png: "Morango.png",       webp: "Morango.webp" },
+      pe_moleque: { de: /^Morango\.(png|webp)$/i,      png: "Pé de Moleque.png", webp: "Pé de Moleque.webp" },
+    };
+    function corrigirFotos(p){
+      const regra = FOTOS_ANTIGAS[p.id];
+      if(!regra) return p;
+      const q = { ...p };
+      if(regra.de.test(p.img || "")) q.img = regra.png;
+      if(regra.de.test(p.imgWebp || "")) q.imgWebp = regra.webp;
+      return q;
+    }
+
     function productCardHTML(p){
+      p = corrigirFotos(p);
       const priceLabel = formatBRL(Number(p.price) || 0);
       const imgSrc = p.img || "";
       const pictureHTML = p.imgWebp
