@@ -1619,3 +1619,19 @@ html{ scroll-behavior: smooth; }
 @media (max-width: 640px){
   .felicidade-fotos{ display: none; }
 }
+
+/* ===== Troca de slides sem "piscar" =====
+   Antes os dois slides ficavam meio transparentes ao mesmo tempo, por cima
+   de um fundo preto e debaixo de uma camada escura: a cada troca o banner
+   escurecia. Agora o novo aparece por cima do antigo, e o antigo só some
+   depois que o novo já cobriu tudo. */
+.hero-image{ background: #efdfbf; }
+.hero-image::after{ display: none; }
+.slide{
+  z-index: 1;
+  transition: opacity 0s linear .6s, visibility 0s linear .6s;
+}
+.slide.active{
+  z-index: 2;
+  transition: opacity .55s ease, visibility 0s;
+}
