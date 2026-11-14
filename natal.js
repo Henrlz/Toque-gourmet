@@ -91,6 +91,55 @@
     document.body.appendChild(camada);
   }
 
+  /* ---------- Explosão de pipoca de Natal ----------
+     A explosão do index.html continua a mesma; aqui só trocamos parte das
+     pipocas por enfeites. Ela aparece uma vez por temporada de Natal, mesmo
+     para quem já viu a explosão normal. ?explosao=1 força para testar. */
+  var ENFEITES_SVG = [
+    // floco de neve (contorno azulado para aparecer no fundo claro)
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><g stroke-linecap="round" fill="none">' +
+      '<g stroke="#8fa9bd" stroke-width="5"><path d="M20 3v34M5.3 11.5l29.4 17M5.3 28.5l29.4-17"/></g>' +
+      '<g stroke="#fff" stroke-width="2.6"><path d="M20 3v34M5.3 11.5l29.4 17M5.3 28.5l29.4-17"/>' +
+      '<path d="M15 6l5 4 5-4M15 34l5-4 5 4M5 17l6-1-1-6M35 23l-6 1 1 6M35 17l-6-1 1-6M5 23l6 1-1 6"/></g></g></svg>',
+    // estrela dourada
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20 3l5 11 12 1.2-9 8 2.7 11.8L20 29l-10.7 6 2.7-11.8-9-8L15 14z" fill="#f2c14e" stroke="#b8892f" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+    // bolinha de árvore vermelha
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect x="16" y="3" width="8" height="6" rx="1.5" fill="#d4a63c"/><circle cx="20" cy="23" r="14" fill="#c62a33"/><path d="M8 21q12 6 24 0" stroke="#f2c14e" stroke-width="2" fill="none"/><circle cx="15" cy="17" r="3.5" fill="#fff" opacity=".45"/></svg>'
+  ].map(function(svg){ return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")'; });
+
+  function explosaoDeNatal(){
+    if(typeof window.startPopcornBurst !== "function") return; // só existe na home
+    var original = window.startPopcornBurst;
+
+    window.startPopcornBurst = function(){
+      original();
+      var pipocas = document.querySelectorAll("#popOverlay .popcorn");
+      for(var i = 0; i < pipocas.length; i++){
+        if(Math.random() > 0.4) continue; // ~40% vira enfeite, o resto segue pipoca
+        var el = pipocas[i];
+        el.style.setProperty("--pop-img", ENFEITES_SVG[Math.floor(Math.random() * ENFEITES_SVG.length)]);
+        var lado = Math.round(parseFloat(el.style.width) * 0.6) + "px";
+        el.style.width = lado;
+        el.style.height = lado;
+      }
+    };
+
+    var temporada = hoje.getMonth() >= 10 ? hoje.getFullYear() : hoje.getFullYear() - 1;
+    var chave = "tge_popcorn_natal_" + temporada;
+    var forcada = /[?&]explosao=1/.test(location.search);
+
+    window.startPopcornBurstOnce = function(){
+      try{
+        if(!forcada && localStorage.getItem(chave)) return;
+        localStorage.setItem(chave, "1");
+        localStorage.setItem("tge_popcorn_seen", "1");
+      } catch(e){
+        if(!forcada) return;
+      }
+      window.startPopcornBurst();
+    };
+  }
+
   function enfeitar(){
     var header = document.querySelector("header");
     if(header){
@@ -151,6 +200,7 @@
     }
 
     nevar();
+    explosaoDeNatal();
   }
 
   if(document.readyState === "loading"){
