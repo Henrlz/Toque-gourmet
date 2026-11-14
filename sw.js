@@ -4,14 +4,17 @@
 
    - Páginas: rede primeiro. Preço e cardápio mudam, e cache-first aqui faria
      a cliente ver valor antigo por dias. O cache só entra se a rede falhar.
-   - Estáticos (css, imagens): responde do cache e atualiza por trás, que é o
-     que deixa a segunda visita instantânea.
+   - CSS e JS: rede primeiro, como as páginas. Se viessem do cache, logo
+     depois de uma publicação a página nova chegava com o estilo antigo e o
+     site aparecia "quebrado" até recarregar.
+   - Imagens e fontes: responde do cache e atualiza por trás, que é o que
+     deixa a segunda visita instantânea.
    - Firebase, Supabase e qualquer outra origem: nunca passa pelo cache. São
      login, produtos e upload — cachear isso quebra o painel.
 
    Ao publicar mudança em arquivo estático, suba o VERSAO para os antigos
    serem descartados. */
-const VERSAO = 'tg-v10';
+const VERSAO = 'tg-v11';
 const CACHE_PAGINAS = `${VERSAO}-paginas`;
 const CACHE_ESTATICOS = `${VERSAO}-estaticos`;
 
@@ -46,8 +49,25 @@ self.addEventListener('activate', (evento) => {
   );
 });
 
+function ehCodigo(url) {
+  return /\.(css|js|json)$/i.test(url.pathname);
+}
+
 function ehEstatico(url) {
-  return /\.(css|js|png|jpe?g|webp|svg|woff2?|ico)$/i.test(url.pathname);
+  return /\.(png|jpe?g|webp|svg|woff2?|ico)$/i.test(url.pathname);
+}
+
+// Rede primeiro; guarda uma cópia para quando a pessoa estiver sem internet.
+function redePrimeiro(req, nomeCache) {
+  return fetch(req)
+    .then((resp) => {
+      if (resp && resp.status === 200) {
+        const copia = resp.clone();
+        caches.open(nomeCache).then((c) => c.put(req, copia));
+      }
+      return resp;
+    })
+    .catch(() => caches.match(req).then((r) => r || Response.error()));
 }
 
 self.addEventListener('fetch', (evento) => {
@@ -72,6 +92,11 @@ self.addEventListener('fetch', (evento) => {
         })
         .catch(() => caches.match(req).then((r) => r || caches.match('/index.html')))
     );
+    return;
+  }
+
+  if (ehCodigo(url)) {
+    evento.respondWith(redePrimeiro(req, CACHE_ESTATICOS));
     return;
   }
 

@@ -185,7 +185,7 @@
         <!-- SLIDE 2: iFood — a foto da dona da loja + texto de verdade (não imagem) -->
         <div class="slide slide-ifood" data-slide="1">
           <div class="ifood-faixa">
-            <img class="ifood-foto" src="ifood-dona.png" alt="A dona da Toque Gourmet mostrando a loja no celular" loading="lazy">
+            <img class="ifood-foto" src="ifood-dona.png" alt="A dona da Toque Gourmet mostrando a loja no celular" decoding="async">
             <div class="ifood-texto">
               <p class="ifood-mao">pronta entrega!</p>
               <h2>Estamos no iFood</h2>
@@ -610,8 +610,8 @@
       const priceLabel = formatBRL(Number(p.price) || 0);
       const imgSrc = p.img || "";
       const pictureHTML = p.imgWebp
-        ? `<picture><source type="image/webp" srcset="${p.imgWebp}"><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`
-        : `<picture><img src="${imgSrc}" alt="${p.name}" loading="lazy"></picture>`;
+        ? `<picture><source type="image/webp" srcset="${p.imgWebp}"><img src="${imgSrc}" alt="${p.name}" decoding="async"></picture>`
+        : `<picture><img src="${imgSrc}" alt="${p.name}" decoding="async"></picture>`;
       // A etiqueta vem do campo "tag" do produto (definido no painel). Sem
       // ela, sabor VIP ganha a sua automaticamente.
       const rotulo = (p.tag || "").trim() || (p.category === "VIP" ? "VIP" : "");
@@ -1124,7 +1124,16 @@
           M: ["balde M.webp", "balde M.png", "Balde M.png"],
           G: ["balde G.webp", "balde G.png", "Balde G.png"],
         };
-        const trocarFoto = () => loadBucketImageWithFallback(photo, ph, candidatesBySize[size], `Foto de exemplo do ${nomeDoBalde(size)}`);
+        // A foto nova é carregada por trás e só entra quando está pronta: nada
+        // de esconder a atual e mostrar um quadro vazio enquanto carrega.
+        const vezDaFoto = ++trocaDeFoto;
+        const trocarFoto = () => carregarFotoBalde(candidatesBySize[size], (src) => {
+          if(vezDaFoto !== trocaDeFoto) return; // já pediram outro tamanho
+          photo.src = src;
+          photo.alt = `Foto de exemplo do ${nomeDoBalde(size)}`;
+          photo.style.display = "block";
+          ph.style.display = "none";
+        });
 
         // Ao trocar de tamanho: a foto "vira" como um cartão (troca no meio
         // do giro, quando está de lado) e o pote dá um pulinho.
@@ -1132,12 +1141,10 @@
         tamanhoMostrado = size;
         const semAnimacao = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         if(mudouTamanho && !semAnimacao){
-          const vez = ++trocaDeFoto; // cliques rápidos: só vale a última troca
           reiniciarAnimacao(document.querySelector(".monta-foto"), "virando");
           reiniciarAnimacao(document.getElementById("pote"), "pulando");
-          setTimeout(() => { if(vez === trocaDeFoto) trocarFoto(); }, 200);
+          setTimeout(trocarFoto, 200); // troca no meio do giro, quando a foto está de lado
         } else {
-          trocaDeFoto++;
           trocarFoto();
         }
       }
@@ -1145,6 +1152,30 @@
 
     let tamanhoMostrado = null;
     let trocaDeFoto = 0;
+    const fotosBaldeProntas = {}; // nomes de arquivo que já carregaram
+
+    // Tenta os nomes de arquivo em ordem e devolve o primeiro que carregar.
+    function carregarFotoBalde(candidatos, pronto){
+      const conhecido = candidatos.find((c) => fotosBaldeProntas[c]);
+      if(conhecido){ pronto(conhecido); return; }
+      let i = 0;
+      (function tentar(){
+        if(i >= candidatos.length) return;
+        const src = candidatos[i++];
+        const teste = new Image();
+        teste.onload = () => { fotosBaldeProntas[src] = true; pronto(src); };
+        teste.onerror = tentar;
+        teste.src = src;
+      })();
+    }
+
+    // deixa as três fotos prontas antes de alguém trocar o tamanho
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        [["Balde P.webp","Balde P.png"],["balde M.webp","balde M.png"],["balde G.webp","balde G.png"]]
+          .forEach((c) => carregarFotoBalde(c, () => {}));
+      }, 1500);
+    });
     function reiniciarAnimacao(el, classe){
       if(!el) return;
       el.classList.remove(classe);
