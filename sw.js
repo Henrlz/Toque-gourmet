@@ -11,7 +11,7 @@
 
    Ao publicar mudança em arquivo estático, suba o VERSAO para os antigos
    serem descartados. */
-const VERSAO = 'tg-v5';
+const VERSAO = 'tg-v6';
 const CACHE_PAGINAS = `${VERSAO}-paginas`;
 const CACHE_ESTATICOS = `${VERSAO}-estaticos`;
 

@@ -1609,3 +1609,13 @@ html{ scroll-behavior: smooth; }
   .felicidade-fotos{ flex-basis: 110px; }
   .felicidade-polaroide{ width: 96px; top: 50%; margin-top: -62px; }
 }
+/* sem a polaroide: só os dois saquinhos lado a lado */
+.felicidade-fotos{ flex-basis: 300px; }
+.felicidade-saco.s1{ left: -20px; }
+.felicidade-saco.s2{ left: 110px; }
+@media (max-width: 1020px){
+  .felicidade-fotos{ flex-basis: 200px; }
+}
+@media (max-width: 640px){
+  .felicidade-fotos{ display: none; }
+}
