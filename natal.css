@@ -90,23 +90,25 @@ html.natal .about-hero{ padding-top: calc(84px + var(--natal-topo) + var(--natal
 html.natal .brand{ position: relative; }
 .natal-gorro{
   position:absolute;
-  left: -13px;
-  top: -15px;
-  width: 44px;
+  /* centralizado em cima do logo (54px), com a faixa branca na borda dele */
+  left: 8px;
+  top: -20px;
+  width: 38px;
   height: auto;
-  transform: rotate(-24deg);
+  transform: rotate(-6deg);
   z-index: 2;
   pointer-events:none;
-  filter: drop-shadow(0 3px 3px rgba(0,0,0,.22));
-  transform-origin: 70% 90%;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.20));
+  transform-origin: 50% 90%;
   animation: natal-gorro 4s ease-in-out infinite;
 }
 @keyframes natal-gorro{
-  0%, 100%{ transform: rotate(-24deg); }
-  50%{ transform: rotate(-19deg); }
+  0%, 100%{ transform: rotate(-6deg); }
+  50%{ transform: rotate(-3deg); }
 }
 @media (max-width: 520px){
-  .natal-gorro{ width: 36px; left: -11px; top: -13px; }
+  /* logo de 44px no celular */
+  .natal-gorro{ width: 32px; left: 6px; top: -17px; }
 }
 
 /* ---------- Neve ---------- */

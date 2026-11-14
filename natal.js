@@ -9,7 +9,7 @@
   var FIM    = { mes: 1,  dia: 6 };   // 6 de janeiro (Dia de Reis)
 
   var TEXTOS = {
-    faixaExtra: "Encomende para a ceia, o amigo secreto e a confraternização",
+    faixaExtra: "Encomendas de Natal abertas: ceia, amigo secreto e confraternização",
     selo: "Edição de Natal",
     presente: "Ideia de presente",
     eventosTitulo: "Natal e fim de ano",
