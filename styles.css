@@ -1842,3 +1842,18 @@ html{ scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce){
   .monta-foto.virando, .pote.pulando{ animation: none; }
 }
+
+/* ===== iPhone: carrinho e menu cabem na tela visível =====
+   "100vh" no Safari do iPhone inclui a área atrás da barra de endereço, e o
+   fim do carrinho (com o botão de finalizar) ficava escondido. "100dvh" é a
+   altura que realmente aparece; o "env()" dá folga para a faixa de baixo. */
+.cart-drawer{
+  height: 100vh;      /* navegadores antigos */
+  height: 100dvh;
+}
+.cart-foot{ padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+.mobile-nav{
+  height: 100vh;
+  height: 100dvh;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+}
