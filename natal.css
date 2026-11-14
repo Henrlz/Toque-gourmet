@@ -277,3 +277,6 @@ html.natal .cart-head{
 /* ---------- Primeiro slide: o selo de Natal entra no lugar do recadinho ---------- */
 html.natal .felicidade-mao{ display: none; }
 html.natal .felicidade-texto .natal-selo{ margin-bottom: 4px; font-size: 10px; padding: 4px 12px; }
+
+/* ---------- Pote do balde vira presente: fita e laço ---------- */
+html.natal .pote-natal{ display: inline; }
